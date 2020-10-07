@@ -4,7 +4,6 @@ open import Function using (id ; _∘_ ; const)
 
 open import Data.Unit
 
-
 open import Denote.Sig
 open import Denote.StagedSig
 
@@ -26,8 +25,6 @@ module _ where
            → (sc : (z : Z c) → L ⊤ → Tree L ζ (L (I z)))
            → (k  : L (R c) → Tree L ζ A) 
            → Tree L ζ A
-
-  variable C : Set
 
 -- Tree L ζ is an applicative functor
 module _ where
@@ -52,7 +49,7 @@ module _ where
     leaf x        >>= t = t x
     node c l sc k >>= t = node c l sc (k >=> t)
 
-    _>=>_ : (A → Tree L ζ B) → (B → Tree L ζ C) → (A → Tree L ζ C)
+    _>=>_ : ∀ {C} → (A → Tree L ζ B) → (B → Tree L ζ C) → (A → Tree L ζ C)
     (f >=> g) x = f x >>= g
 
   _>>_ : Tree L ζ A → Tree L ζ B → Tree L ζ B
@@ -81,3 +78,6 @@ module _ where
 
   denote (f `⊙ g) x = (denote f ⊙ denote g) x
 
+module _ where
+
+  open _⟨_⟩⇒_ public

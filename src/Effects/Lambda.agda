@@ -18,6 +18,8 @@ open import Denote.Sig
 open import Denote.StagedSig
 open import Denote.Tree
 
+open import Value.Core
+
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality hiding ([_])
 
@@ -60,11 +62,8 @@ module _ where
 
   Env : Set → Set; Env V = List (Name × V)
 
-  record ClosureVal (V : Set) : Set where
-    field  close     : Name → FunLabel → Env V → V
-           isClosure : V → Maybe (Name × FunLabel × Env V)
-
-  open ClosureVal ⦃ ... ⦄
+  data Closure (V : Set) : Set where
+    clos : Name → FunLabel → Env V → Closure V
 
   pget₀ : List A → FunLabel → Maybe A
   pget₀ [] _ = nothing
@@ -89,7 +88,7 @@ module _ where
   try : Maybe A → (A → Tree L ζ (Maybe B)) → Tree L ζ (Maybe B)
   try m f = maybe f (leaf nothing) m
   
-  hLam' :  ⦃ ClosureVal V ⦄ → ⦃ RawFunctor L ⦄ →
+  hLam' :  ⦃ Closure V `⊏ V ⦄ → ⦃ RawFunctor L ⦄ →
            Env V → Resumptions L ζ V → ℕ →
            Tree L (LamOpSig V ⊞ ζ) A →
            Tree  (Maybe ∘ (Resumptions L ζ V ×_) ∘ L)
@@ -97,7 +96,7 @@ module _ where
   hLam' _ _ zero _ = leaf nothing
   hLam' E funs (suc m) (leaf x)  = leaf (just (funs , x))
   hLam' E funs (suc m) (node (inj₁ (`app v₁ v₂)) l _ k) =
-    try (isClosure v₁) λ{ (n , f , E') →
+    try (project v₁) λ{ (clos n f E') →
       try (retrieve funs f) (λ r →
         hLam' E funs m (r l) >>= flip try (λ{ (funs' , lv) →
               hLam' E funs' m (k lv) }))}
@@ -106,7 +105,7 @@ module _ where
       hLam' E funs m (k (const v <$> l)))
   hLam' E funs (suc m) (node (inj₁ (`abs n)) l st k) =
     hLam'   E (funs ++ [ st tt ]) m
-            (k (const (close n (length funs) E) <$> l))
+            (k (const (inject (clos n (length funs) E)) <$> l))
   hLam' E funs (suc m) (node (inj₁ (`letbind n v)) l st k) =
     hLam' ((n , v) ∷ E) funs m (st tt l) >>=
       flip try λ{ (funs' , lv) → hLam' E funs' m (k lv) }
@@ -115,3 +114,19 @@ module _ where
               (λ r → flip try (λ{ (funs' , l') →
                                   hLam' E funs' m (st r l') }))
               (flip try λ{ (funs' , lr) → hLam' E funs' m (k lr) })
+
+  open _⊏_ ⦃...⦄
+
+  fetch : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → Tree id ζ V
+  fetch ⦃ w ⦄ x = node (inj (`fetch x)) tt
+                       (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
+                       (λ r   → return (subst id (R≡ ⦃ w ⦄) r))
+
+  abs : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → Tree id ζ V → Tree id ζ V
+  abs {ζ = ζ} ⦃ w ⦄ x e = node (inj (`abs x)) tt
+                 (λ z _ → subst (Tree id ζ) {!z!} e)
+                 {!!}
+
+  postulate app : ⦃ LamOpSig V ⊏ ζ ⦄ → V → V → Tree id ζ V
+
+  postulate letbind : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → V → Tree id ζ V → Tree id ζ V 

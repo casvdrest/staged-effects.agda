@@ -6,10 +6,13 @@ open import Data.Unit
 open import Data.Empty
 open import Data.Product
 open import Data.Sum
+open import Data.List
 
 open import Denote.Sig
 open import Denote.StagedSig
 open import Denote.Tree
+
+open import Relation.Binary.PropositionalEquality
 
 open import Category.Functor
 
@@ -40,3 +43,15 @@ module _ where
     node  c (s , l)
           (λ{ z (s' , l) → hSt'' s' (st z l) })
           (λ{ (s' , lr) → hSt'' s' (k lr) })
+
+  open _⊏_ ⦃...⦄
+
+  get : ⦃ StateSig S ⊏ ζ ⦄ → Tree id ζ S
+  get ⦃ w ⦄ = node (inj `get) tt
+                   (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
+                   (λ r   → return (subst id (R≡ ⦃ w ⦄) r))
+
+  put : ⦃ StateSig S ⊏ ζ ⦄ → S → Tree id ζ S
+  put {S = S} ⦃ w ⦄ s = node (inj (`put s)) tt
+               (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
+               (const $ return s) 

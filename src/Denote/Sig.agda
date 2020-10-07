@@ -2,6 +2,7 @@ module Denote.Sig where
 
 open import Data.Sum using (_⊎_ ; inj₁ ; inj₂)
 open import Data.Product using (_×_ ; _,_ ; proj₁ ; proj₂ ; Σ-syntax ; uncurry)
+open import Data.Maybe
 
 open import Function using (id ; const ; _∘_)
 open import Level
@@ -65,3 +66,16 @@ module _ where
         
   (f ⊙ g) (inj₁ x , p) = f (x , p)
   (f ⊙ g) (inj₂ y , p) = g (y , p)
+
+module _ where
+
+  open import Value.Core
+
+  _⊰_ : (σ₁ σ₂ : Sig) → Set₁
+  σ₁ ⊰ σ₂ = ∀ {A} → ⟦ σ₁ ⟧ᶜ A `⊏ ⟦ σ₂ ⟧ᶜ A
+
+  injectᶜ : ⦃ σ₁ ⊰ σ₂ ⦄ → ⟦ σ₁ ⟧ᶜ (μ σ₂) → μ {zero} σ₂
+  injectᶜ x = ⟨ inject x ⟩
+
+  projectᶜ : ⦃ σ₁ ⊰ σ₂ ⦄ → μ {zero} σ₂ → Maybe (⟦ σ₁ ⟧ᶜ (μ {zero} σ₂))
+  projectᶜ ⟨ x ⟩ = project x

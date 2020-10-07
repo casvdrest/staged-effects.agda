@@ -32,7 +32,9 @@ module _ where
   record _⊏_ (ζ₁ ζ₂ : StagedSig) : Set₁ where 
     open StagedSig
     field  inj  : C ζ₁ → C ζ₂
-           ret≡ : ∀ {op} → R ζ₂ (inj op) ≡ R ζ₁ op 
+           R≡ : ∀ {op} → R ζ₂ (inj op) ≡ R ζ₁ op 
+           Z≡ : ∀ {op} → Z ζ₂ (inj op) ≡ Z ζ₁ op
+           --I≡ : ∀ {op z} → I ζ₂  ≡ {!!}
 
   variable ζ ζ₁ ζ₂ ζ₃ : StagedSig
 
@@ -40,14 +42,17 @@ module _ where
 
   instance ⊏-refl : ζ ⊏ ζ
   _⊏_.inj  ⊏-refl = id
-  _⊏_.ret≡ ⊏-refl = refl
+  _⊏_.R≡ ⊏-refl = refl
+  _⊏_.Z≡ ⊏-refl = refl
 
   instance ⊏-left : ζ₁ ⊏ ζ₁ ⊞ ζ₂
   _⊏_.inj  ⊏-left = inj₁
-  _⊏_.ret≡ ⊏-left = refl
+  _⊏_.R≡ ⊏-left = refl
+  _⊏_.Z≡ ⊏-left = refl
 
   instance ⊏-right : ⦃ ζ₁ ⊏ ζ₃ ⦄ → ζ₁ ⊏ ζ₂ ⊞ ζ₃  
   _⊏_.inj  ⊏-right = inj₂ ∘ inj 
-  _⊏_.ret≡ (⊏-right ⦃ w ⦄) {op} rewrite (ret≡ ⦃ w ⦄ {op}) = refl
+  _⊏_.R≡ (⊏-right ⦃ w ⦄) {op} rewrite (R≡ ⦃ w ⦄ {op}) = refl
+  _⊏_.Z≡ (⊏-right ⦃ w ⦄) {op} rewrite (Z≡ ⦃ w ⦄ {op}) = refl
 
   
