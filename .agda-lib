@@ -1,0 +1,5 @@
+name: enumerator.agda  -- Comment
+depend: 
+include:
+  src
+  ./lib/agda-stdlib/src/
