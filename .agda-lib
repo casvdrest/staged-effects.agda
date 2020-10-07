@@ -1,4 +1,4 @@
-name: enumerator.agda  -- Comment
+name: staged-effects.agda  -- Comment
 depend: 
 include:
   src
