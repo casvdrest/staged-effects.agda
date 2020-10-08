@@ -14,19 +14,20 @@
 
   <a id="214" class="Keyword">open</a> <a id="219" href="Value.Core.html#118" class="Module Operator">_⊂_</a> <a id="223" class="Symbol">⦃...⦄</a> <a id="229" class="Keyword">public</a> 
 
-  <a id="240" class="Keyword">instance</a> <a id="249" href="Value.Core.html#249" class="Function">⊂-refl</a> <a id="256" class="Symbol">:</a> <a id="258" class="Symbol">∀</a> <a id="260" class="Symbol">{</a><a id="261" href="Value.Core.html#261" class="Bound">V</a><a id="262" class="Symbol">}</a> <a id="264" class="Symbol">→</a> <a id="266" href="Value.Core.html#261" class="Bound">V</a> <a id="268" href="Value.Core.html#118" class="Record Operator">⊂</a> <a id="270" href="Value.Core.html#261" class="Bound">V</a> 
-  <a id="275" href="Value.Core.html#159" class="Field">_⊂_.inject</a>  <a id="287" href="Value.Core.html#249" class="Function">⊂-refl</a> <a id="294" class="Symbol">=</a> <a id="296" href="Function.Base.html#615" class="Function">id</a>
-  <a id="301" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="313" href="Value.Core.html#249" class="Function">⊂-refl</a> <a id="320" class="Symbol">=</a> <a id="322" href="Data.Maybe.Base.html#892" class="InductiveConstructor">just</a>
+<a id="238" class="Comment">{-
+  instance ⊂-refl : ∀ {V} → V ⊂ V 
+  _⊂_.inject  ⊂-refl = id
+  _⊂_.project ⊂-refl = just
 
-  <a id="330" class="Keyword">instance</a> <a id="339" href="Value.Core.html#339" class="Function">⊂-left</a> <a id="346" class="Symbol">:</a> <a id="348" class="Symbol">∀</a> <a id="350" class="Symbol">{</a><a id="351" href="Value.Core.html#351" class="Bound">V₁</a> <a id="354" href="Value.Core.html#354" class="Bound">V₂</a><a id="356" class="Symbol">}</a> <a id="358" class="Symbol">→</a> <a id="360" href="Value.Core.html#351" class="Bound">V₁</a> <a id="363" href="Value.Core.html#118" class="Record Operator">⊂</a> <a id="365" class="Symbol">(</a><a id="366" href="Value.Core.html#351" class="Bound">V₁</a> <a id="369" href="Data.Sum.Base.html#734" class="Datatype Operator">⊎</a> <a id="371" href="Value.Core.html#354" class="Bound">V₂</a><a id="373" class="Symbol">)</a>
-  <a id="377" href="Value.Core.html#159" class="Field">_⊂_.inject</a>  <a id="389" href="Value.Core.html#339" class="Function">⊂-left</a> <a id="396" class="Symbol">=</a> <a id="398" href="Data.Sum.Base.html#784" class="InductiveConstructor">inj₁</a>
-  <a id="405" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="417" href="Value.Core.html#339" class="Function">⊂-left</a> <a id="424" class="Symbol">(</a><a id="425" href="Data.Sum.Base.html#784" class="InductiveConstructor">inj₁</a> <a id="430" href="Value.Core.html#430" class="Bound">x</a><a id="431" class="Symbol">)</a> <a id="433" class="Symbol">=</a> <a id="435" href="Data.Maybe.Base.html#892" class="InductiveConstructor">just</a> <a id="440" href="Value.Core.html#430" class="Bound">x</a>
-  <a id="444" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="456" href="Value.Core.html#339" class="Function">⊂-left</a> <a id="463" class="Symbol">(</a><a id="464" href="Data.Sum.Base.html#809" class="InductiveConstructor">inj₂</a> <a id="469" href="Value.Core.html#469" class="Bound">y</a><a id="470" class="Symbol">)</a> <a id="472" class="Symbol">=</a> <a id="474" href="Data.Maybe.Base.html#872" class="InductiveConstructor">nothing</a>
+  instance ⊂-left : ∀ {V₁ V₂} → V₁ ⊂ (V₁ ⊎ V₂)
+  _⊂_.inject  ⊂-left = inj₁
+  _⊂_.project ⊂-left (inj₁ x) = just x
+  _⊂_.project ⊂-left (inj₂ y) = nothing
 
-  <a id="485" class="Keyword">instance</a> <a id="494" href="Value.Core.html#494" class="Function">⊂-right</a> <a id="502" class="Symbol">:</a> <a id="504" class="Symbol">∀</a> <a id="506" class="Symbol">{</a><a id="507" href="Value.Core.html#507" class="Bound">V₁</a> <a id="510" href="Value.Core.html#510" class="Bound">V₂</a> <a id="513" href="Value.Core.html#513" class="Bound">V₃</a><a id="515" class="Symbol">}</a> <a id="517" class="Symbol">→</a> <a id="519" class="Symbol">⦃</a> <a id="521" href="Value.Core.html#507" class="Bound">V₁</a> <a id="524" href="Value.Core.html#118" class="Record Operator">⊂</a> <a id="526" href="Value.Core.html#513" class="Bound">V₃</a> <a id="529" class="Symbol">⦄</a> <a id="531" class="Symbol">→</a> <a id="533" href="Value.Core.html#507" class="Bound">V₁</a> <a id="536" href="Value.Core.html#118" class="Record Operator">⊂</a> <a id="538" class="Symbol">(</a><a id="539" href="Value.Core.html#510" class="Bound">V₂</a> <a id="542" href="Data.Sum.Base.html#734" class="Datatype Operator">⊎</a> <a id="544" href="Value.Core.html#513" class="Bound">V₃</a><a id="546" class="Symbol">)</a> 
-  <a id="551" href="Value.Core.html#159" class="Field">_⊂_.inject</a>  <a id="563" href="Value.Core.html#494" class="Function">⊂-right</a> <a id="571" class="Symbol">=</a> <a id="573" href="Data.Sum.Base.html#809" class="InductiveConstructor">inj₂</a> <a id="578" href="Function.Base.html#1031" class="Function Operator">∘</a> <a id="580" href="Value.Core.html#159" class="Field">inject</a>
-  <a id="589" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="601" href="Value.Core.html#494" class="Function">⊂-right</a> <a id="609" class="Symbol">(</a><a id="610" href="Data.Sum.Base.html#784" class="InductiveConstructor">inj₁</a> <a id="615" href="Value.Core.html#615" class="Bound">x</a><a id="616" class="Symbol">)</a> <a id="618" class="Symbol">=</a> <a id="620" href="Data.Maybe.Base.html#872" class="InductiveConstructor">nothing</a>
-  <a id="630" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="642" href="Value.Core.html#494" class="Function">⊂-right</a> <a id="650" class="Symbol">(</a><a id="651" href="Data.Sum.Base.html#809" class="InductiveConstructor">inj₂</a> <a id="656" href="Value.Core.html#656" class="Bound">y</a><a id="657" class="Symbol">)</a> <a id="659" class="Symbol">=</a> <a id="661" href="Value.Core.html#187" class="Field">project</a> <a id="669" href="Value.Core.html#656" class="Bound">y</a>
-
+  instance ⊂-right : ∀ {V₁ V₂ V₃} → ⦃ V₁ ⊂ V₃ ⦄ → V₁ ⊂ (V₂ ⊎ V₃) 
+  _⊂_.inject  ⊂-right = inj₂ ∘ inject
+  _⊂_.project ⊂-right (inj₁ x) = nothing
+  _⊂_.project ⊂-right (inj₂ y) = project y
+-}</a>
   
 </pre></body></html>

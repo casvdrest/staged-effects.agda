@@ -1,5 +1,62 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="utf-8"><title>Lang</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="Lang.html" class="Module">Lang</a> <a id="13" class="Keyword">where</a>
+<html><head><meta charset="utf-8"><title>Lang</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Symbol">{-#</a> <a id="5" class="Keyword">OPTIONS</a> <a id="13" class="Pragma">--type-in-type</a> <a id="28" class="Pragma">--overlapping-instances</a> <a id="52" class="Symbol">#-}</a>
+
+<a id="57" class="Keyword">module</a> <a id="64" href="Lang.html" class="Module">Lang</a> <a id="69" class="Keyword">where</a>
+
+<a id="76" class="Keyword">open</a> <a id="81" class="Keyword">import</a> <a id="88" href="Function.html" class="Module">Function</a>
+
+<a id="98" class="Keyword">open</a> <a id="103" class="Keyword">import</a> <a id="110" href="Data.Nat.html" class="Module">Data.Nat</a>
+<a id="119" class="Keyword">open</a> <a id="124" class="Keyword">import</a> <a id="131" href="Data.Sum.html" class="Module">Data.Sum</a>
+<a id="140" class="Keyword">open</a> <a id="145" class="Keyword">import</a> <a id="152" href="Data.Maybe.html" class="Module">Data.Maybe</a>
+
+
+<a id="165" class="Comment">-- Step 1: import basic library functionality</a>
+<a id="211" class="Keyword">open</a> <a id="216" class="Keyword">import</a> <a id="223" href="Denote.html" class="Module">Denote</a>
+
+<a id="231" class="Comment">-- Step 2: import effects</a>
+<a id="257" class="Keyword">open</a> <a id="262" class="Keyword">import</a> <a id="269" href="Effects.Nat.html" class="Module">Effects.Nat</a>
+<a id="281" class="Keyword">open</a> <a id="286" class="Keyword">import</a> <a id="293" href="Effects.State.html" class="Module">Effects.State</a>
+<a id="307" class="Keyword">open</a> <a id="312" class="Keyword">import</a> <a id="319" href="Effects.Lambda.html" class="Module">Effects.Lambda</a>
+
+<a id="335" class="Comment">-- Step 3: import object language constructors</a>
+<a id="382" class="Keyword">open</a> <a id="387" class="Keyword">import</a> <a id="394" href="Expression.Nat.html" class="Module">Expression.Nat</a>
+<a id="409" class="Keyword">open</a> <a id="414" class="Keyword">import</a> <a id="421" href="Expression.State.html" class="Module">Expression.State</a> <a id="438" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a>
+<a id="440" class="Keyword">open</a> <a id="445" class="Keyword">import</a> <a id="452" href="Expression.Lambda.html" class="Module">Expression.Lambda</a>
+
+<a id="471" class="Comment">-- Step 4: assemble eDSL</a>
+<a id="496" class="Keyword">module</a> <a id="503" href="Lang.html#503" class="Module">_</a> <a id="505" class="Keyword">where</a>
+
+  <a id="514" class="Keyword">data</a> <a id="519" href="Lang.html#519" class="Datatype">Val</a> <a id="523" class="Symbol">:</a> <a id="525" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="529" class="Keyword">where</a>
+    <a id="539" href="Lang.html#539" class="InductiveConstructor">vnat</a>  <a id="545" class="Symbol">:</a> <a id="547" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="549" class="Symbol">→</a> <a id="551" href="Lang.html#519" class="Datatype">Val</a>
+    <a id="559" href="Lang.html#559" class="InductiveConstructor">vclos</a> <a id="565" class="Symbol">:</a> <a id="567" href="Effects.Lambda.html#1591" class="Datatype">Closure</a> <a id="575" href="Lang.html#519" class="Datatype">Val</a> <a id="579" class="Symbol">→</a> <a id="581" href="Lang.html#519" class="Datatype">Val</a>
+
+  <a id="588" class="Keyword">instance</a> <a id="597" href="Lang.html#597" class="Function">ℕ⊂Val</a> <a id="603" class="Symbol">:</a> <a id="605" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="607" href="Value.Core.html#118" class="Record Operator">⊂</a> <a id="609" href="Lang.html#519" class="Datatype">Val</a>
+  <a id="615" href="Value.Core.html#159" class="Field">_⊂_.inject</a> <a id="626" href="Lang.html#597" class="Function">ℕ⊂Val</a> <a id="632" class="Symbol">=</a> <a id="634" href="Lang.html#539" class="InductiveConstructor">vnat</a>
+  <a id="641" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="653" href="Lang.html#597" class="Function">ℕ⊂Val</a> <a id="659" class="Symbol">(</a><a id="660" href="Lang.html#539" class="InductiveConstructor">vnat</a> <a id="665" href="Lang.html#665" class="Bound">x</a><a id="666" class="Symbol">)</a> <a id="668" class="Symbol">=</a> <a id="670" href="Data.Maybe.Base.html#892" class="InductiveConstructor">just</a> <a id="675" href="Lang.html#665" class="Bound">x</a>
+  <a id="679" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="691" href="Lang.html#597" class="Function">ℕ⊂Val</a> <a id="697" class="Symbol">(</a><a id="698" href="Lang.html#559" class="InductiveConstructor">vclos</a> <a id="704" href="Lang.html#704" class="Bound">x</a><a id="705" class="Symbol">)</a> <a id="707" class="Symbol">=</a> <a id="709" href="Data.Maybe.Base.html#872" class="InductiveConstructor">nothing</a>
+
+  <a id="720" class="Keyword">instance</a> <a id="729" href="Lang.html#729" class="Function">Closure⊂Val</a> <a id="741" class="Symbol">:</a> <a id="743" href="Effects.Lambda.html#1591" class="Datatype">Closure</a> <a id="751" href="Lang.html#519" class="Datatype">Val</a> <a id="755" href="Value.Core.html#118" class="Record Operator">⊂</a> <a id="757" href="Lang.html#519" class="Datatype">Val</a>
+  <a id="763" href="Value.Core.html#159" class="Field">_⊂_.inject</a> <a id="774" href="Lang.html#729" class="Function">Closure⊂Val</a> <a id="786" class="Symbol">=</a> <a id="788" href="Lang.html#559" class="InductiveConstructor">vclos</a>
+  <a id="796" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="808" href="Lang.html#729" class="Function">Closure⊂Val</a> <a id="820" class="Symbol">(</a><a id="821" href="Lang.html#539" class="InductiveConstructor">vnat</a> <a id="826" href="Lang.html#826" class="Bound">x</a><a id="827" class="Symbol">)</a> <a id="829" class="Symbol">=</a> <a id="831" href="Data.Maybe.Base.html#872" class="InductiveConstructor">nothing</a>
+  <a id="841" href="Value.Core.html#187" class="Field">_⊂_.project</a> <a id="853" href="Lang.html#729" class="Function">Closure⊂Val</a> <a id="865" class="Symbol">(</a><a id="866" href="Lang.html#559" class="InductiveConstructor">vclos</a> <a id="872" href="Lang.html#872" class="Bound">x</a><a id="873" class="Symbol">)</a> <a id="875" class="Symbol">=</a> <a id="877" href="Data.Maybe.Base.html#892" class="InductiveConstructor">just</a> <a id="882" href="Lang.html#872" class="Bound">x</a>
+
+  <a id="887" href="Lang.html#887" class="Function">Expr</a> <a id="892" class="Symbol">=</a> <a id="894" href="Expression.Nat.html#162" class="Function">NatExpr</a> <a id="902" href="Denote.Sig.html#936" class="Function Operator">∪</a> <a id="904" href="Expression.State.html#342" class="Function">StateExpr</a> <a id="914" href="Denote.Sig.html#936" class="Function Operator">∪</a> <a id="916" href="Expression.Lambda.html#315" class="Function">LamExpr</a> 
+
+  <a id="928" href="Lang.html#928" class="Function Operator">⟦_⟧</a> <a id="932" class="Symbol">:</a> <a id="934" href="Denote.Sig.html#482" class="Datatype">μ</a> <a id="936" href="Lang.html#887" class="Function">Expr</a> <a id="941" class="Symbol">→</a> <a id="943" href="Denote.Tree.html#202" class="Datatype">Tree</a> <a id="948" href="Function.Base.html#615" class="Function">id</a> <a id="951" class="Symbol">(</a><a id="952" href="Effects.Nat.html#471" class="Function">NatOpSig</a> <a id="961" href="Lang.html#519" class="Datatype">Val</a> <a id="965" href="Denote.StagedSig.html#454" class="Function Operator">⊞</a> <a id="967" href="Effects.State.html#508" class="Function">StateSig</a> <a id="976" href="Agda.Builtin.Nat.html#192" class="Datatype">ℕ</a> <a id="978" href="Denote.StagedSig.html#454" class="Function Operator">⊞</a> <a id="980" href="Effects.Lambda.html#843" class="Function">LamOpSig</a> <a id="989" href="Lang.html#519" class="Datatype">Val</a><a id="992" class="Symbol">)</a> <a id="994" href="Lang.html#519" class="Datatype">Val</a>
+  <a id="1000" href="Lang.html#928" class="Function Operator">⟦_⟧</a> <a id="1004" class="Symbol">=</a> <a id="1006" href="Denote.Tree.html#1489" class="Function Operator">⟪</a> <a id="1008" href="Expression.Nat.html#249" class="Function">⟦nat⟧</a> <a id="1014" href="Denote.Tree.html#1590" class="Function Operator">`⊙</a> <a id="1017" href="Expression.State.html#526" class="Function">⟦state⟧</a> <a id="1025" href="Denote.Tree.html#1590" class="Function Operator">`⊙</a> <a id="1028" href="Expression.Lambda.html#612" class="Function">⟦lambda⟧</a> <a id="1037" href="Denote.Tree.html#1489" class="Function Operator">⟫</a>
+
+
+<a id="1041" class="Comment">-- Examples </a>
+<a id="1054" class="Keyword">module</a> <a id="1061" href="Lang.html#1061" class="Module">_</a> <a id="1063" class="Keyword">where</a> 
+
+  <a id="1073" href="Lang.html#1073" class="Function">`x</a> <a id="1076" href="Lang.html#1076" class="Function">`y</a> <a id="1079" href="Lang.html#1079" class="Function">`z</a> <a id="1082" class="Symbol">:</a> <a id="1084" href="Effects.Lambda.html#662" class="Function">Name</a>
+  <a id="1091" href="Lang.html#1073" class="Function">`x</a> <a id="1094" class="Symbol">=</a> <a id="1096" class="Number">0</a>
+  <a id="1100" href="Lang.html#1076" class="Function">`y</a> <a id="1103" class="Symbol">=</a> <a id="1105" class="Number">1</a>
+  <a id="1109" href="Lang.html#1079" class="Function">`z</a> <a id="1112" class="Symbol">=</a> <a id="1114" class="Number">2</a>
+
+  <a id="1119" class="Comment">-- let x = (λ y → put 1337) in 42 </a>
+  <a id="1156" href="Lang.html#1156" class="Function">prog₀</a> <a id="1162" class="Symbol">:</a> <a id="1164" href="Denote.Sig.html#482" class="Datatype">μ</a> <a id="1166" href="Lang.html#887" class="Function">Expr</a>
+  <a id="1173" href="Lang.html#1156" class="Function">prog₀</a> <a id="1179" class="Symbol">=</a> <a id="1181" href="Expression.Lambda.html#1338" class="Function">letbindᴱ</a> <a id="1190" href="Lang.html#1073" class="Function">`x</a> <a id="1193" class="Symbol">(</a><a id="1194" href="Expression.Lambda.html#1127" class="Function">absᴱ</a> <a id="1199" href="Lang.html#1076" class="Function">`y</a> <a id="1202" class="Symbol">(</a><a id="1203" href="Expression.State.html#954" class="Function">putᴱ</a> <a id="1208" class="Symbol">(</a><a id="1209" href="Expression.Nat.html#413" class="Function">natᴱ</a> <a id="1214" class="Number">1337</a><a id="1218" class="Symbol">)))</a> <a id="1222" class="Symbol">(</a><a id="1223" href="Expression.State.html#954" class="Function">putᴱ</a> <a id="1228" class="Symbol">(</a><a id="1229" href="Expression.Nat.html#413" class="Function">natᴱ</a> <a id="1234" class="Number">42</a><a id="1236" class="Symbol">))</a>
 
   
 </pre></body></html>
