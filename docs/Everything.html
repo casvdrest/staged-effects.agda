@@ -1,20 +1,50 @@
 <!DOCTYPE HTML>
 <html><head><meta charset="utf-8"><title>Everything</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="Everything.html" class="Module">Everything</a> <a id="19" class="Keyword">where</a>
 
-<a id="26" class="Keyword">import</a> <a id="33" href="Staged.Denote.Sig.html" class="Module">Staged.Denote.Sig</a>
-<a id="51" class="Keyword">import</a> <a id="58" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a>
-<a id="82" class="Keyword">import</a> <a id="89" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a>
 
-<a id="109" class="Keyword">import</a> <a id="116" href="Staged.Effects.State.html" class="Module">Staged.Effects.State</a>
-<a id="137" class="Keyword">import</a> <a id="144" href="Staged.Effects.Lambda.html" class="Module">Staged.Effects.Lambda</a>
-<a id="166" class="Keyword">import</a> <a id="173" href="Staged.Effects.Nat.html" class="Module">Staged.Effects.Nat</a>
+<a id="27" class="Comment">--------------------------------------------------------------------------------</a>
+<a id="108" class="Comment">-- Section 2 (Compositional Semantics for Languages with</a>
+<a id="165" class="Comment">-- λ-abstraction and state)</a>
 
-<a id="193" class="Keyword">import</a> <a id="200" href="Staged.Expression.State.html" class="Module">Staged.Expression.State</a>
-<a id="224" class="Keyword">import</a> <a id="231" href="Staged.Expression.Lambda.html" class="Module">Staged.Expression.Lambda</a>
-<a id="256" class="Keyword">import</a> <a id="263" href="Staged.Expression.Nat.html" class="Module">Staged.Expression.Nat</a>
-<a id="285" class="Keyword">import</a> <a id="292" href="Staged.Expression.Seq.html" class="Module">Staged.Expression.Seq</a>
+<a id="194" class="Keyword">open</a> <a id="199" class="Keyword">import</a> <a id="206" href="Compositional.Core.html" class="Module">Compositional.Core</a>
 
-<a id="315" class="Keyword">import</a> <a id="322" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a>
 
-<a id="341" class="Keyword">import</a> <a id="348" href="Staged.Lang.html" class="Module">Staged.Lang</a>
+<a id="227" class="Comment">--------------------------------------------------------------------------------</a>
+<a id="308" class="Comment">-- Section 3 (Effects and Handlers)</a>
+
+
+
+<a id="347" class="Comment">--------------------------------------------------------------------------------</a>
+<a id="428" class="Comment">-- Section 4 (Scoped Effects and Handlers)</a>
+
+
+
+<a id="474" class="Comment">--------------------------------------------------------------------------------</a>
+<a id="555" class="Comment">-- Section 5 (Staged Effects and Handlers)</a>
+
+
+<a id="600" class="Comment">-- Section 5.1 (Trees with Staged Effects)</a>
+<a id="643" class="Keyword">open</a> <a id="648" class="Keyword">import</a> <a id="655" href="Staged.Denote.Sig.html" class="Module">Staged.Denote.Sig</a>
+<a id="673" class="Keyword">open</a> <a id="678" class="Keyword">import</a> <a id="685" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a>
+<a id="709" class="Keyword">open</a> <a id="714" class="Keyword">import</a> <a id="721" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a>
+
+<a id="741" class="Comment">-- Section 5.2 (Effect Staging)</a>
+<a id="773" class="Keyword">import</a> <a id="780" href="Staged.Effects.State.html" class="Module">Staged.Effects.State</a>
+
+<a id="802" class="Comment">-- Section 5.3 (Defining and Handling Let Binding and Lambda)</a>
+<a id="864" class="Keyword">import</a> <a id="871" href="Staged.Effects.Lambda.html" class="Module">Staged.Effects.Lambda</a>
+<a id="893" class="Keyword">import</a> <a id="900" href="Staged.Effects.Nat.html" class="Module">Staged.Effects.Nat</a>
+
+
+<a id="921" class="Comment">-- Modular expression types for the object language introduced in section 2</a>
+<a id="997" class="Keyword">import</a> <a id="1004" href="Staged.Expression.State.html" class="Module">Staged.Expression.State</a>
+<a id="1028" class="Keyword">import</a> <a id="1035" href="Staged.Expression.Lambda.html" class="Module">Staged.Expression.Lambda</a>
+<a id="1060" class="Keyword">import</a> <a id="1067" href="Staged.Expression.Nat.html" class="Module">Staged.Expression.Nat</a>
+<a id="1089" class="Keyword">import</a> <a id="1096" href="Staged.Expression.Seq.html" class="Module">Staged.Expression.Seq</a>
+
+<a id="1119" class="Comment">-- Subtyping for value types</a>
+<a id="1148" class="Keyword">import</a> <a id="1155" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a>
+
+<a id="1174" class="Comment">-- Modular implementation of the object langugage</a>
+<a id="1224" class="Keyword">import</a> <a id="1231" href="Staged.Lang.html" class="Module">Staged.Lang</a>
 </pre></body></html>
