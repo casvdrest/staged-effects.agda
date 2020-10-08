@@ -29,7 +29,7 @@ module _ where
 
   variable 
            A B : Set ℓ
-           σ σ₁ σ₂ : Sig
+           σ σ₁ σ₂ σ₃ : Sig
 
   mapᶜ : (f : A → B) → ⟦ σ ⟧ᶜ A → ⟦ σ ⟧ᶜ B 
   mapᶜ f (s , p) = s , f ∘ p
@@ -46,11 +46,13 @@ module _ where
 
   open Sig
 
+  infixr 10 _∪_
   _∪_ : (σ₁ σ₂ : Sig) → Sig
   S (σ₁ ∪ σ₂) = S σ₁ ⊎ S σ₂
   P (σ₁ ∪ σ₂) (inj₁ x) = P σ₁ x
   P (σ₁ ∪ σ₂) (inj₂ y) = P σ₂ y
 
+  infixr 10 _∩_
   _∩_ : (σ₁ σ₂ : Sig) → Sig
   S (σ₁ ∩ σ₂) = S σ₁ × S σ₂
   P (σ₁ ∩ σ₂) = uncurry λ s₁ s₂ → P σ₁ s₁ ⊎ P σ₂ s₂
@@ -59,6 +61,7 @@ module _ where
 -- Algebra composition
 module _ where 
 
+  infixr 10 _⊙_
   _⊙_ :   (σ₁ ⇒ A)
         → (σ₂ ⇒ A)
           -----------
@@ -73,6 +76,10 @@ module _ where
 
   _⊰_ : (σ₁ σ₂ : Sig) → Set₁
   σ₁ ⊰ σ₂ = ∀ {A} → ⟦ σ₁ ⟧ᶜ A ⊂ ⟦ σ₂ ⟧ᶜ A
+
+  postulate instance ⊰-refl : σ ⊰ σ
+  postulate instance ⊰-left : σ₁ ⊰ (σ₁ ∪ σ₂)
+  postulate instance ⊰-right : ⦃ σ₁ ⊰ σ₃ ⦄ → σ₁ ⊰ (σ₂ ∪ σ₃)
 
   injectᶜ : ⦃ σ₁ ⊰ σ₂ ⦄ → ⟦ σ₁ ⟧ᶜ (μ σ₂) → μ {zero} σ₂
   injectᶜ x = ⟨ inject x ⟩

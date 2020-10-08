@@ -13,6 +13,7 @@ module _ where
 
   open _⊂_ ⦃...⦄ public 
 
+{-
   instance ⊂-refl : ∀ {V} → V ⊂ V 
   _⊂_.inject  ⊂-refl = id
   _⊂_.project ⊂-refl = just
@@ -26,5 +27,5 @@ module _ where
   _⊂_.inject  ⊂-right = inj₂ ∘ inject
   _⊂_.project ⊂-right (inj₁ x) = nothing
   _⊂_.project ⊂-right (inj₂ y) = project y
-
+-}
   

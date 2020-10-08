@@ -70,7 +70,7 @@ module _ where
   ⟪_⟫ : (f : σ ⟨ ζ ⟩⇒ A) → (x : μ {ℓ} σ) → Tree id ζ A
   ⟪ f ⟫ = foldᶜ (denote f) 
 
-
+  infixr 10 _`⊙_
   _`⊙_ :   (f : σ₁ ⟨ ζ ⟩⇒ A)
          → (g : σ₂ ⟨ ζ ⟩⇒ A)
            ------------------

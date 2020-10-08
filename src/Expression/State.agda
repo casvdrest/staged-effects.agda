@@ -15,12 +15,14 @@ open import Effects.State
 
 open import Value.Core
 
-module _ {V : Set} where 
+module _ where 
 
   StateExpr : Sig
   Sig.S StateExpr = Bool
   Sig.P StateExpr false = ⊥  -- get
   Sig.P StateExpr true  = ⊤  -- put e
+
+module _ {V : Set} where 
 
   postulate ERROR : ∀ {A : Set ℓ} → A
 
@@ -37,6 +39,8 @@ module _ {V : Set} where
       where nothing → ERROR
     put n
     return (inject n)
+
+module _ where 
 
   getᴱ : ⦃ StateExpr ⊰ σ ⦄ → μ σ
   getᴱ = injectᶜ (false , λ())

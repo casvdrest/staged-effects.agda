@@ -15,7 +15,7 @@ open import Effects.Lambda
 
 open import Value.Core
 
-module _ {V : Set} where
+module _ where
 
   LamExpr : Sig
   Sig.S LamExpr = (Name ⊎ Name) ⊎ ⊤ ⊎ Name
@@ -24,6 +24,7 @@ module _ {V : Set} where
   Sig.P LamExpr (inj₂ (inj₁ tt)) = Bool  -- app e e
   Sig.P LamExpr (inj₂ (inj₂ y )) = Bool  -- letin x e e
 
+module _ {V : Set} where 
 
   ⟦lambda⟧ :   ⦃ LamOpSig V ⊏ ζ ⦄
              → ⦃ Closure V ⊂ V ⦄
@@ -40,6 +41,7 @@ module _ {V : Set} where
     v ← p false
     letbind y v (p true)
 
+module _ where 
 
   varᴱ : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ
   varᴱ x = injectᶜ ((inj₁ (inj₁ x)) , λ())
