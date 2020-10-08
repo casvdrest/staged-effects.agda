@@ -1,5 +1,3 @@
-{-# OPTIONS --type-in-type #-}
-
 module Staged.Effects.Nat where
 
 open import Function

@@ -1,5 +1,3 @@
-{-# OPTIONS --type-in-type #-}
-
 module Staged.Effects.Lambda where
 
 open import Function
