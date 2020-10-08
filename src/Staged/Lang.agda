@@ -82,8 +82,8 @@ module _ where
              let' `u (app' (var' `x) (var' `x))  $ get'
 
 
-  ut₀ : operate ⟦ example₀ ⟧ 20 ≡ {!!}
-  ut₀ = refl
+  -- ut₀ : operate ⟦ example₀ ⟧ 20 ≡ {!!}
+  -- ut₀ = refl
 
   -- example₁ : Expr
   -- example₁ =
