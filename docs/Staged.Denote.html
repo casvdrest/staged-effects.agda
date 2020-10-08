@@ -1,29 +1,29 @@
 <!DOCTYPE HTML>
 <html><head><meta charset="utf-8"><title>Staged.Denote</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="Staged.Denote.html" class="Module">Staged.Denote</a> <a id="22" class="Keyword">where</a>
 
-<a id="29" class="Keyword">import</a> <a id="36" href="Staged.Denote.Sig.html" class="Module">Staged.Denote.Sig</a>
-<a id="54" class="Keyword">import</a> <a id="61" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a>
-<a id="85" class="Keyword">import</a> <a id="92" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a>
+<a id="29" class="Keyword">import</a> <a id="36" href="Container.html" class="Module">Container</a>
+<a id="46" class="Keyword">import</a> <a id="53" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a>
+<a id="77" class="Keyword">import</a> <a id="84" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a>
 
-<a id="112" class="Keyword">open</a> <a id="117" href="Staged.Denote.Sig.html" class="Module">Staged.Denote.Sig</a> <a id="135" class="Keyword">public</a>
-<a id="142" class="Keyword">open</a> <a id="147" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a> <a id="171" class="Keyword">public</a>
-<a id="178" class="Keyword">open</a> <a id="183" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a> <a id="202" class="Keyword">public</a>
+<a id="104" class="Keyword">open</a> <a id="109" href="Container.html" class="Module">Container</a> <a id="119" class="Keyword">public</a>
+<a id="126" class="Keyword">open</a> <a id="131" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a> <a id="155" class="Keyword">public</a>
+<a id="162" class="Keyword">open</a> <a id="167" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a> <a id="186" class="Keyword">public</a>
 
-<a id="210" class="Keyword">import</a> <a id="217" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a>
-<a id="235" class="Keyword">open</a> <a id="240" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a> <a id="258" class="Keyword">public</a>
+<a id="194" class="Keyword">import</a> <a id="201" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a>
+<a id="219" class="Keyword">open</a> <a id="224" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a> <a id="242" class="Keyword">public</a>
 
-<a id="266" class="Keyword">open</a> <a id="271" class="Keyword">import</a> <a id="278" href="Category.Functor.html" class="Module">Category.Functor</a>
-<a id="295" class="Keyword">open</a> <a id="300" class="Keyword">import</a> <a id="307" href="Function.html" class="Module">Function</a>
-<a id="316" class="Keyword">open</a> <a id="321" class="Keyword">import</a> <a id="328" href="Level.html" class="Module">Level</a>
+<a id="250" class="Keyword">open</a> <a id="255" class="Keyword">import</a> <a id="262" href="Category.Functor.html" class="Module">Category.Functor</a>
+<a id="279" class="Keyword">open</a> <a id="284" class="Keyword">import</a> <a id="291" href="Function.html" class="Module">Function</a>
+<a id="300" class="Keyword">open</a> <a id="305" class="Keyword">import</a> <a id="312" href="Level.html" class="Module">Level</a>
 
-<a id="335" class="Keyword">open</a> <a id="340" class="Keyword">import</a> <a id="347" href="Data.Maybe.html" class="Module">Data.Maybe</a>
-<a id="358" class="Keyword">open</a> <a id="363" class="Keyword">import</a> <a id="370" href="Data.Product.html" class="Module">Data.Product</a>
+<a id="319" class="Keyword">open</a> <a id="324" class="Keyword">import</a> <a id="331" href="Data.Maybe.html" class="Module">Data.Maybe</a>
+<a id="342" class="Keyword">open</a> <a id="347" class="Keyword">import</a> <a id="354" href="Data.Product.html" class="Module">Data.Product</a>
 
 
-<a id="385" class="Keyword">module</a> <a id="392" href="Staged.Denote.html#392" class="Module">_</a> <a id="394" class="Keyword">where</a>
+<a id="369" class="Keyword">module</a> <a id="376" href="Staged.Denote.html#376" class="Module">_</a> <a id="378" class="Keyword">where</a>
 
-  <a id="403" class="Keyword">instance</a> <a id="412" href="Staged.Denote.html#412" class="Function">id-functor</a> <a id="423" class="Symbol">:</a> <a id="425" href="Category.Functor.html#499" class="Record">RawFunctor</a> <a id="436" class="Symbol">{</a><a id="437" href="Agda.Primitive.html#690" class="Primitive">zero</a><a id="441" class="Symbol">}</a> <a id="443" href="Function.Base.html#615" class="Function">id</a>
-  <a id="448" href="Category.Functor.html#608" class="Field Operator">RawFunctor._&lt;$&gt;_</a> <a id="465" href="Staged.Denote.html#412" class="Function">id-functor</a> <a id="476" class="Symbol">=</a> <a id="478" href="Function.Base.html#615" class="Function">id</a>
+  <a id="387" class="Keyword">instance</a> <a id="396" href="Staged.Denote.html#396" class="Function">id-functor</a> <a id="407" class="Symbol">:</a> <a id="409" href="Category.Functor.html#499" class="Record">RawFunctor</a> <a id="420" class="Symbol">{</a><a id="421" href="Agda.Primitive.html#690" class="Primitive">zero</a><a id="425" class="Symbol">}</a> <a id="427" href="Function.Base.html#615" class="Function">id</a>
+  <a id="432" href="Category.Functor.html#608" class="Field Operator">RawFunctor._&lt;$&gt;_</a> <a id="449" href="Staged.Denote.html#396" class="Function">id-functor</a> <a id="460" class="Symbol">=</a> <a id="462" href="Function.Base.html#615" class="Function">id</a>
 
 
 
