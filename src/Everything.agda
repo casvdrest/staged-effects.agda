@@ -41,21 +41,21 @@ open import Staged.Denote.StagedSig
 open import Staged.Denote.Tree
 
 -- Section 5.2 (Effect Staging)
-import Staged.Effects.State
+open import Staged.Effects.State
 
 -- Section 5.3 (Defining and Handling Let Binding and Lambda)
-import Staged.Effects.Lambda
-import Staged.Effects.Nat
+open import Staged.Effects.Lambda
+open import Staged.Effects.Nat
 
 
 -- Modular expression types for the object language introduced in section 2
-import Staged.Expression.State
-import Staged.Expression.Lambda
-import Staged.Expression.Nat
-import Staged.Expression.Seq
+open import Staged.Expression.State
+open import Staged.Expression.Lambda
+open import Staged.Expression.Nat
+open import Staged.Expression.Seq
 
 -- Subtyping for value types
-import Staged.Value.Core
+open import Staged.Value.Core
 
 -- Modular implementation of the object langugage
-import Staged.Lang
+open import Staged.Lang
