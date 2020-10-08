@@ -8,10 +8,26 @@
 
 <a id="100" class="Keyword">module</a> <a id="107" href="Staged.Value.Core.html#107" class="Module">_</a> <a id="109" class="Keyword">where</a>
 
-  <a id="118" class="Keyword">record</a> <a id="125" href="Staged.Value.Core.html#125" class="Record Operator">_⊂_</a> <a id="129" class="Symbol">(</a><a id="130" href="Staged.Value.Core.html#130" class="Bound">V₁</a> <a id="133" href="Staged.Value.Core.html#133" class="Bound">V₂</a> <a id="136" class="Symbol">:</a> <a id="138" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="141" class="Symbol">)</a> <a id="143" class="Symbol">:</a> <a id="145" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="149" class="Keyword">where</a> 
-    <a id="160" class="Keyword">field</a> <a id="166" href="Staged.Value.Core.html#166" class="Field">injectⱽ</a>  <a id="175" class="Symbol">:</a> <a id="177" href="Staged.Value.Core.html#130" class="Bound">V₁</a> <a id="180" class="Symbol">→</a> <a id="182" href="Staged.Value.Core.html#133" class="Bound">V₂</a>
-          <a id="195" href="Staged.Value.Core.html#195" class="Field">projectⱽ</a> <a id="204" class="Symbol">:</a> <a id="206" href="Staged.Value.Core.html#133" class="Bound">V₂</a> <a id="209" class="Symbol">→</a> <a id="211" href="Data.Maybe.Base.html#838" class="Datatype">Maybe</a> <a id="217" href="Staged.Value.Core.html#130" class="Bound">V₁</a>
+  <a id="118" class="Keyword">record</a> <a id="125" href="Staged.Value.Core.html#125" class="Record Operator">_⊂_</a> <a id="129" class="Symbol">(</a><a id="130" href="Staged.Value.Core.html#130" class="Bound">V₁</a> <a id="133" href="Staged.Value.Core.html#133" class="Bound">V₂</a> <a id="136" class="Symbol">:</a> <a id="138" class="PrimitiveType">Set</a><a id="141" class="Symbol">)</a> <a id="143" class="Symbol">:</a> <a id="145" class="PrimitiveType">Set</a> <a id="149" class="Keyword">where</a> 
+    <a id="160" class="Keyword">field</a> <a id="166" href="Staged.Value.Core.html#166" class="Field">injectᵛ</a>  <a id="175" class="Symbol">:</a> <a id="177" href="Staged.Value.Core.html#130" class="Bound">V₁</a> <a id="180" class="Symbol">→</a> <a id="182" href="Staged.Value.Core.html#133" class="Bound">V₂</a>
+          <a id="195" href="Staged.Value.Core.html#195" class="Field">projectᵛ</a> <a id="204" class="Symbol">:</a> <a id="206" href="Staged.Value.Core.html#133" class="Bound">V₂</a> <a id="209" class="Symbol">→</a> <a id="211" href="Data.Maybe.Base.html#838" class="Datatype">Maybe</a> <a id="217" href="Staged.Value.Core.html#130" class="Bound">V₁</a>
 
   <a id="223" class="Keyword">open</a> <a id="228" href="Staged.Value.Core.html#125" class="Module Operator">_⊂_</a> <a id="232" class="Symbol">⦃...⦄</a> <a id="238" class="Keyword">public</a> 
+
+<a id="247" class="Comment">{-
+  instance ⊂-refl : ∀ {V} → V ⊂ V 
+  _⊂_.inject  ⊂-refl = id
+  _⊂_.project ⊂-refl = just
+
+  instance ⊂-left : ∀ {V₁ V₂} → V₁ ⊂ (V₁ ⊎ V₂)
+  _⊂_.inject  ⊂-left = inj₁
+  _⊂_.project ⊂-left (inj₁ x) = just x
+  _⊂_.project ⊂-left (inj₂ y) = nothing
+
+  instance ⊂-right : ∀ {V₁ V₂ V₃} → ⦃ V₁ ⊂ V₃ ⦄ → V₁ ⊂ (V₂ ⊎ V₃) 
+  _⊂_.inject  ⊂-right = inj₂ ∘ inject
+  _⊂_.project ⊂-right (inj₁ x) = nothing
+  _⊂_.project ⊂-right (inj₂ y) = project y
+-}</a>
   
 </pre></body></html>
