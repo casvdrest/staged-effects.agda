@@ -13,9 +13,22 @@ open import Compositional.Core
 
 
 
+
 --------------------------------------------------------------------------------
 -- Section 4 (Scoped Effects and Handlers)
 
+-- Signatures
+open import Scoped.Sig
+
+-- Section 4.1 (Trees with Scoped Effects)
+open import Scoped.Prog
+
+-- Bonus: Exceptions
+open import Scoped.Except
+
+-- Section 4.2 (Effect Weaving)
+open import Scoped.State
+open import Scoped.LetBind
 
 
 --------------------------------------------------------------------------------

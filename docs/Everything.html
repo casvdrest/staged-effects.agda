@@ -14,37 +14,50 @@
 
 
 
-<a id="347" class="Comment">--------------------------------------------------------------------------------</a>
-<a id="428" class="Comment">-- Section 4 (Scoped Effects and Handlers)</a>
+
+<a id="348" class="Comment">--------------------------------------------------------------------------------</a>
+<a id="429" class="Comment">-- Section 4 (Scoped Effects and Handlers)</a>
+
+<a id="473" class="Comment">-- Signatures</a>
+<a id="487" class="Keyword">open</a> <a id="492" class="Keyword">import</a> <a id="499" href="Scoped.Sig.html" class="Module">Scoped.Sig</a>
+
+<a id="511" class="Comment">-- Section 4.1 (Trees with Scoped Effects)</a>
+<a id="554" class="Keyword">open</a> <a id="559" class="Keyword">import</a> <a id="566" href="Scoped.Prog.html" class="Module">Scoped.Prog</a>
+
+<a id="579" class="Comment">-- Bonus: Exceptions</a>
+<a id="600" class="Keyword">open</a> <a id="605" class="Keyword">import</a> <a id="612" href="Scoped.Except.html" class="Module">Scoped.Except</a>
+
+<a id="627" class="Comment">-- Section 4.2 (Effect Weaving)</a>
+<a id="659" class="Keyword">open</a> <a id="664" class="Keyword">import</a> <a id="671" href="Scoped.State.html" class="Module">Scoped.State</a>
+<a id="684" class="Keyword">open</a> <a id="689" class="Keyword">import</a> <a id="696" href="Scoped.LetBind.html" class="Module">Scoped.LetBind</a>
 
 
-
-<a id="474" class="Comment">--------------------------------------------------------------------------------</a>
-<a id="555" class="Comment">-- Section 5 (Staged Effects and Handlers)</a>
-
-
-<a id="600" class="Comment">-- Section 5.1 (Trees with Staged Effects)</a>
-<a id="643" class="Keyword">open</a> <a id="648" class="Keyword">import</a> <a id="655" href="Staged.Denote.Sig.html" class="Module">Staged.Denote.Sig</a>
-<a id="673" class="Keyword">open</a> <a id="678" class="Keyword">import</a> <a id="685" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a>
-<a id="709" class="Keyword">open</a> <a id="714" class="Keyword">import</a> <a id="721" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a>
-
-<a id="741" class="Comment">-- Section 5.2 (Effect Staging)</a>
-<a id="773" class="Keyword">import</a> <a id="780" href="Staged.Effects.State.html" class="Module">Staged.Effects.State</a>
-
-<a id="802" class="Comment">-- Section 5.3 (Defining and Handling Let Binding and Lambda)</a>
-<a id="864" class="Keyword">import</a> <a id="871" href="Staged.Effects.Lambda.html" class="Module">Staged.Effects.Lambda</a>
-<a id="893" class="Keyword">import</a> <a id="900" href="Staged.Effects.Nat.html" class="Module">Staged.Effects.Nat</a>
+<a id="713" class="Comment">--------------------------------------------------------------------------------</a>
+<a id="794" class="Comment">-- Section 5 (Staged Effects and Handlers)</a>
 
 
-<a id="921" class="Comment">-- Modular expression types for the object language introduced in section 2</a>
-<a id="997" class="Keyword">import</a> <a id="1004" href="Staged.Expression.State.html" class="Module">Staged.Expression.State</a>
-<a id="1028" class="Keyword">import</a> <a id="1035" href="Staged.Expression.Lambda.html" class="Module">Staged.Expression.Lambda</a>
-<a id="1060" class="Keyword">import</a> <a id="1067" href="Staged.Expression.Nat.html" class="Module">Staged.Expression.Nat</a>
-<a id="1089" class="Keyword">import</a> <a id="1096" href="Staged.Expression.Seq.html" class="Module">Staged.Expression.Seq</a>
+<a id="839" class="Comment">-- Section 5.1 (Trees with Staged Effects)</a>
+<a id="882" class="Keyword">open</a> <a id="887" class="Keyword">import</a> <a id="894" href="Staged.Denote.Sig.html" class="Module">Staged.Denote.Sig</a>
+<a id="912" class="Keyword">open</a> <a id="917" class="Keyword">import</a> <a id="924" href="Staged.Denote.StagedSig.html" class="Module">Staged.Denote.StagedSig</a>
+<a id="948" class="Keyword">open</a> <a id="953" class="Keyword">import</a> <a id="960" href="Staged.Denote.Tree.html" class="Module">Staged.Denote.Tree</a>
 
-<a id="1119" class="Comment">-- Subtyping for value types</a>
-<a id="1148" class="Keyword">import</a> <a id="1155" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a>
+<a id="980" class="Comment">-- Section 5.2 (Effect Staging)</a>
+<a id="1012" class="Keyword">import</a> <a id="1019" href="Staged.Effects.State.html" class="Module">Staged.Effects.State</a>
 
-<a id="1174" class="Comment">-- Modular implementation of the object langugage</a>
-<a id="1224" class="Keyword">import</a> <a id="1231" href="Staged.Lang.html" class="Module">Staged.Lang</a>
+<a id="1041" class="Comment">-- Section 5.3 (Defining and Handling Let Binding and Lambda)</a>
+<a id="1103" class="Keyword">import</a> <a id="1110" href="Staged.Effects.Lambda.html" class="Module">Staged.Effects.Lambda</a>
+<a id="1132" class="Keyword">import</a> <a id="1139" href="Staged.Effects.Nat.html" class="Module">Staged.Effects.Nat</a>
+
+
+<a id="1160" class="Comment">-- Modular expression types for the object language introduced in section 2</a>
+<a id="1236" class="Keyword">import</a> <a id="1243" href="Staged.Expression.State.html" class="Module">Staged.Expression.State</a>
+<a id="1267" class="Keyword">import</a> <a id="1274" href="Staged.Expression.Lambda.html" class="Module">Staged.Expression.Lambda</a>
+<a id="1299" class="Keyword">import</a> <a id="1306" href="Staged.Expression.Nat.html" class="Module">Staged.Expression.Nat</a>
+<a id="1328" class="Keyword">import</a> <a id="1335" href="Staged.Expression.Seq.html" class="Module">Staged.Expression.Seq</a>
+
+<a id="1358" class="Comment">-- Subtyping for value types</a>
+<a id="1387" class="Keyword">import</a> <a id="1394" href="Staged.Value.Core.html" class="Module">Staged.Value.Core</a>
+
+<a id="1413" class="Comment">-- Modular implementation of the object langugage</a>
+<a id="1463" class="Keyword">import</a> <a id="1470" href="Staged.Lang.html" class="Module">Staged.Lang</a>
 </pre></body></html>
