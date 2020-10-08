@@ -77,9 +77,21 @@ module _ where
   _⊰_ : (σ₁ σ₂ : Sig) → Set₁
   σ₁ ⊰ σ₂ = ∀ {A} → ⟦ σ₁ ⟧ᶜ A ⊂ ⟦ σ₂ ⟧ᶜ A
 
-  postulate instance ⊰-refl : σ ⊰ σ
-  postulate instance ⊰-left : σ₁ ⊰ (σ₁ ∪ σ₂)
-  postulate instance ⊰-right : ⦃ σ₁ ⊰ σ₃ ⦄ → σ₁ ⊰ (σ₂ ∪ σ₃)
+  instance ⊰-refl : σ ⊰ σ
+  _⊂_.inject  ⊰-refl = id
+  _⊂_.project ⊰-refl = just
+
+  instance ⊰-left : σ₁ ⊰ (σ₁ ∪ σ₂)
+  _⊂_.inject ⊰-left (s , p) = inj₁ s , p
+  _⊂_.project ⊰-left (inj₁ x , p) = just (x , p)
+  _⊂_.project ⊰-left (inj₂ y , p) = nothing
+
+  instance ⊰-right : ⦃ σ₁ ⊰ σ₃ ⦄ → σ₁ ⊰ (σ₂ ∪ σ₃)
+  _⊂_.inject (⊰-right ⦃ w ⦄) x with inject ⦃ w ⦄ x
+  ... | s , p =  inj₂ s , p
+  _⊂_.project ⊰-right (inj₁ x , p) = nothing
+  _⊂_.project ⊰-right (inj₂ y , p) = project (y , p)
+
 
   injectᶜ : ⦃ σ₁ ⊰ σ₂ ⦄ → ⟦ σ₁ ⟧ᶜ (μ σ₂) → μ {zero} σ₂
   injectᶜ x = ⟨ inject x ⟩

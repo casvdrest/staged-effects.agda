@@ -11,6 +11,7 @@ import Staged.Effects.Nat
 import Staged.Expression.State
 import Staged.Expression.Lambda
 import Staged.Expression.Nat
+import Staged.Expression.Seq
 
 import Staged.Value.Core
 

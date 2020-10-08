@@ -1,5 +1,4 @@
 {-# OPTIONS --type-in-type #-}
-
 module Staged.Denote.StagedSig where
 
 open import Function using (id ; _∘_)
@@ -54,13 +53,15 @@ module _ where
   _⊏_.Z≡ ⊏-left = refl
   _⊏_.I≡ ⊏-left = refl
 
-  postulate instance ⊏-right : ⦃ ζ₁ ⊏ ζ₃ ⦄ → ζ₁ ⊏ ζ₂ ⊞ ζ₃  
+  
+  eq≡ : ∀ {ℓ} {A : Set ℓ} {x y : A} → (eq₁ : x ≡ y) → (eq₂ : x ≡ y) → eq₁ ≡ eq₂
+  eq≡ refl refl = refl
 
-  -- _⊏_.inj  ⊏-right = inj₂ ∘ inj 
-  -- _⊏_.R≡ (⊏-right ⦃ w ⦄) {op}     rewrite (R≡ ⦃ w ⦄ {op}) = refl
-  -- _⊏_.Z≡ (⊏-right ⦃ w ⦄) {op}     rewrite (Z≡ ⦃ w ⦄ {op}) = refl
-  -- _⊏_.I≡ (⊏-right ⦃ w ⦄) {op} {z} with (sym (Z≡ ⦃ w ⦄ {op})) | I≡ ⦃ w ⦄ {op} {z}
-  -- ... | zeq | eq = {!!}
+  instance ⊏-right : ⦃ ζ₁ ⊏ ζ₃ ⦄ → ζ₁ ⊏ ζ₂ ⊞ ζ₃  
+  _⊏_.inj  ⊏-right = inj₂ ∘ inj 
+  _⊏_.R≡ (⊏-right ⦃ w ⦄) {op}     rewrite (R≡ ⦃ w ⦄ {op}) = refl
+  _⊏_.Z≡ (⊏-right ⦃ w ⦄) {op}     rewrite (Z≡ ⦃ w ⦄ {op}) = refl
+  _⊏_.I≡ (⊏-right {ζ₁}  ⦃ w ⦄) {op} {z} rewrite (sym (I≡ ⦃ w ⦄ {op} {z})) = cong (StagedSig.I ζ₁) let zeq = (Z≡ ⦃ w ⦄ {op}) in cong (λ x → subst id x z) (eq≡ _ _)
 
 
 
