@@ -1,0 +1,13 @@
+<!DOCTYPE HTML>
+<html><head><meta charset="utf-8"><title>Value.Core</title><link rel="stylesheet" href="Agda.css"></head><body><pre class="Agda"><a id="1" class="Keyword">module</a> <a id="8" href="Value.Core.html" class="Module">Value.Core</a> <a id="19" class="Keyword">where</a>
+
+<a id="26" class="Keyword">open</a> <a id="31" class="Keyword">import</a> <a id="38" href="Data.Maybe.html" class="Module">Data.Maybe</a>
+
+<a id="50" class="Keyword">module</a> <a id="57" href="Value.Core.html#57" class="Module">_</a> <a id="59" class="Keyword">where</a>
+
+  <a id="68" class="Keyword">record</a> <a id="75" href="Value.Core.html#75" class="Record Operator">_`⊏_</a> <a id="80" class="Symbol">(</a><a id="81" href="Value.Core.html#81" class="Bound">V₁</a> <a id="84" href="Value.Core.html#84" class="Bound">V₂</a> <a id="87" class="Symbol">:</a> <a id="89" href="Agda.Primitive.html#326" class="Primitive">Set</a><a id="92" class="Symbol">)</a> <a id="94" class="Symbol">:</a> <a id="96" href="Agda.Primitive.html#326" class="Primitive">Set</a> <a id="100" class="Keyword">where</a> 
+    <a id="111" class="Keyword">field</a> <a id="117" href="Value.Core.html#117" class="Field">inject</a>  <a id="125" class="Symbol">:</a> <a id="127" href="Value.Core.html#81" class="Bound">V₁</a> <a id="130" class="Symbol">→</a> <a id="132" href="Value.Core.html#84" class="Bound">V₂</a>
+          <a id="145" href="Value.Core.html#145" class="Field">project</a> <a id="153" class="Symbol">:</a> <a id="155" href="Value.Core.html#84" class="Bound">V₂</a> <a id="158" class="Symbol">→</a> <a id="160" href="Data.Maybe.Base.html#838" class="Datatype">Maybe</a> <a id="166" href="Value.Core.html#81" class="Bound">V₁</a>
+
+  <a id="172" class="Keyword">open</a> <a id="177" href="Value.Core.html#75" class="Module Operator">_`⊏_</a> <a id="182" class="Symbol">⦃...⦄</a> <a id="188" class="Keyword">public</a>
+</pre></body></html>
