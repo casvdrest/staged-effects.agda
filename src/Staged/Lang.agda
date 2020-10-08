@@ -52,15 +52,15 @@ module _ where
 
 
   -- Compose effect signature
-  LamSig = NatOpSig Val ⊕ StateSig ℕ ⊕ LamOpSig Val ⊕ NoOpSig
+  LangSig = NatOpSig Val ⊕ StateSig ℕ ⊕ LamSig Val ⊕ NoOpSig
 
 
   -- Build semantic function
-  ⟦_⟧ : Expr → Tree id LamSig Val
+  ⟦_⟧ : Expr → Tree id LangSig Val
   ⟦_⟧ = ⟪ ⟦seq⟧ `⊙ ⟦nat⟧ `⊙ ⟦state⟧ `⊙ ⟦lambda⟧ ⟫
 
   -- Define handler application
-  operate : Tree id LamSig Val → ℕ → Maybe Val
+  operate : Tree id LangSig Val → ℕ → Maybe Val
   operate x n with hLam' [] [] n (hSt'' 0 (hNat' x))
   ... | leaf nothing              = nothing
   ... | leaf (just (_ , _ , snd)) = just snd

@@ -21,7 +21,7 @@ module _ where
 
              (c  : S₁)                                
            → (l  : L ⊤)
-           → (sc : (s₂ : S₂ c) → L ⊤ → Tree L ζ (L (P₂ s₂)))
+           → (st : (s₂ : S₂ c) → L ⊤ → Tree L ζ (L (P₂ s₂)))
            → (k  : L (P₁ c) → Tree L ζ A) 
            → Tree L ζ A
 
@@ -30,7 +30,7 @@ module _ where
 
   mapᵀ : (f : A → B) → Tree L ζ A → Tree L ζ B 
   mapᵀ f (leaf x)        = leaf (f x)
-  mapᵀ f (node c l sc k) = node c l sc (mapᵀ f ∘ k)
+  mapᵀ f (node c l st k) = node c l st (mapᵀ f ∘ k)
 
 
   pure : A → Tree L ζ A
@@ -38,7 +38,7 @@ module _ where
 
   _<*>_ : Tree L ζ (A → B) → Tree L ζ A → Tree L ζ B
   leaf f <*> tx = mapᵀ f tx
-  node c l sc k <*> tx = node c l sc (_<*> tx ∘ k)
+  node c l st k <*> tx = node c l st (_<*> tx ∘ k)
 
 -- Tree L ζ is a monad
 module _ where 
@@ -46,7 +46,7 @@ module _ where
   mutual 
     _>>=_ : Tree L ζ A → (A → Tree L ζ B) → Tree L ζ B
     leaf x        >>= t = t x
-    node c l sc k >>= t = node c l sc (k >=> t)
+    node c l st k >>= t = node c l st (k >=> t)
 
     _>=>_ : ∀ {C} → (A → Tree L ζ B) → (B → Tree L ζ C) → (A → Tree L ζ C)
     (f >=> g) x = f x >>= g
