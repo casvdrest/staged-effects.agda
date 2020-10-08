@@ -86,7 +86,10 @@ module _ where
   example₁ = put' (nat' 1) >>' let' `x (abs' `y (put' (nat' 10))) get'
 
   example₂ : Expr
-  example₂ = let' `x (abs' `y (var' `y)) (app' (var' `x) (nat' 4))
+  example₂ = app' (abs' `x (var' `x)) (nat' 4)
+
+  example₃ : Expr
+  example₃ = let' `x (abs' `y (var' `y)) (app' (var' `x) (nat' 5))
 
   ut₀ : operate ⟦ example₀ ⟧ 5 ≡ just (vnat 10)
   ut₀ = refl
@@ -94,6 +97,8 @@ module _ where
   ut₁ : operate ⟦ example₁ ⟧ 5 ≡ just (vnat 1) 
   ut₁ = refl
 
-  ut₂ : operate ⟦ example₂ ⟧ 5 ≡ nothing -- Should be `just (vnat 4)`
+  ut₂ : operate ⟦ example₂ ⟧ 4 ≡ just (vnat 4)
   ut₂ = refl
   
+  ut₃ : operate ⟦ example₃ ⟧ 6 ≡ just (vnat 5)
+  ut₃ = refl
