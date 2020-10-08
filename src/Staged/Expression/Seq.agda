@@ -6,13 +6,14 @@ open import Data.Product
 
 open import Level
 
+open import Container
 open import Staged.Denote
 
 module _ where
 
-  SeqExpr : Sig
-  Sig.S SeqExpr = ⊤
-  Sig.P SeqExpr tt = Bool
+  SeqExpr : Con
+  Con.S SeqExpr = ⊤
+  Con.P SeqExpr tt = Bool
 
 module _ {V : Set} where
 
@@ -21,8 +22,8 @@ module _ {V : Set} where
 
 module _ where
 
-  _>>'_ : ⦃ SeqExpr ⊰ σ ⦄ → μ {zero} σ → μ {zero} σ → μ {zero} σ
-  f >>' g = injectᶜ (tt , λ { false → f ; true → g })
+  _>>'_ : ⦃ SeqExpr ≺ C ⦄ → μ C → μ C → μ C
+  f >>' g = inject (tt , λ { false → f ; true → g })
 
 
   

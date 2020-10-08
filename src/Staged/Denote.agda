@@ -1,11 +1,9 @@
 module Staged.Denote where
 
 import Staged.Denote.Sig
-import Staged.Denote.StagedSig
 import Staged.Denote.Tree
 
 open Staged.Denote.Sig public
-open Staged.Denote.StagedSig public
 open Staged.Denote.Tree public
 
 import Staged.Value.Core

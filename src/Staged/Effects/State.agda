@@ -19,39 +19,39 @@ open import Category.Functor
 module _ where
 
   open RawFunctor ⦃...⦄
-  open StagedSig
+  open Sig
 
-  data StateCmd (S : Set) : Set where
-    `get : StateCmd S
-    `put : (s : S) → StateCmd S
+  data StateOp (H : Set) : Set where
+    `get : StateOp H
+    `put : (h : H) → StateOp H
 
-  StateSig : Set → StagedSig
-  C (StateSig S) = StateCmd S
-  R (StateSig S) `get = S
-  R (StateSig S) (`put s) = ⊤
-  Z (StateSig S) _ = ⊥
+  StateSig : Set → Sig
+  S₁ (StateSig H) = StateOp H
+  P₁ (StateSig H) `get = H
+  P₁ (StateSig H) (`put _) = ⊤
+  S₂ (StateSig H) _ = ⊥
 
-  variable S : Set
+  variable A B H : Set
 
   hSt'' :  ⦃ RawFunctor L ⦄ →
-           S → Tree L (StateSig S ⊞ ζ) A →
-           Tree ((S ×_) ∘ L) ζ (S × A)
-  hSt'' s (leaf x) = leaf (s , x)
-  hSt'' s (node (inj₁ `get) l _ k) = hSt'' s (k (const s <$> l))
-  hSt'' _ (node (inj₁ (`put s)) l _ k) = hSt'' s (k l)
-  hSt'' s (node (inj₂ c) l st k) =
-    node  c (s , l)
-          (λ{ z (s' , l) → hSt'' s' (st z l) })
-          (λ{ (s' , lr) → hSt'' s' (k lr) })
+           H → Tree L (StateSig H ⊕ ζ) A →
+           Tree ((H ×_) ∘ L) ζ (H × A)
+  hSt'' h (leaf x) = leaf (h , x)
+  hSt'' h (node (inj₁ `get) l _ k) = hSt'' h (k (const h <$> l))
+  hSt'' _ (node (inj₁ (`put h)) l _ k) = hSt'' h (k l)
+  hSt'' h (node (inj₂ c) l st k) =
+    node  c (h , l)
+          (λ{ z (h' , l) → hSt'' h' (st z l) })
+          (λ{ (h' , lr) → hSt'' h' (k lr) })
 
   open _⊏_ ⦃...⦄
 
-  get : ⦃ StateSig S ⊏ ζ ⦄ → Tree id ζ S
+  get : ⦃ StateSig H ⊏ ζ ⦄ → Tree id ζ H
   get ⦃ w ⦄ = node (inj `get) tt
-                   (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
-                   (λ r   → return (subst id (R≡ ⦃ w ⦄) r))
+                   (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
+                   (λ r   → return (subst id (P₁≡ ⦃ w ⦄) r))
 
-  put : ⦃ StateSig S ⊏ ζ ⦄ → S → Tree id ζ S
-  put {S = S} ⦃ w ⦄ s = node (inj (`put s)) tt
-               (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
-               (const $ return s) 
+  put : ⦃ StateSig H ⊏ ζ ⦄ → H → Tree id ζ H
+  put ⦃ w ⦄ s = node (inj (`put s)) tt
+                     (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
+                     (const $ return s) 

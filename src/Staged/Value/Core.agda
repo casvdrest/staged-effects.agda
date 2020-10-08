@@ -8,8 +8,8 @@ open import Data.Sum
 module _ where
 
   record _⊂_ (V₁ V₂ : Set) : Set where 
-    field inject  : V₁ → V₂
-          project : V₂ → Maybe V₁
+    field injectᵛ  : V₁ → V₂
+          projectᵛ : V₂ → Maybe V₁
 
   open _⊂_ ⦃...⦄ public 
 

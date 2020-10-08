@@ -25,7 +25,7 @@ open import Category.Functor
 
 module _ where 
 
-  open StagedSig
+  open Sig
   open RawFunctor ⦃...⦄
 
   Name = ℕ
@@ -36,14 +36,14 @@ module _ where
     `abs      :  Name → LamOp V
     `letbind  :  Name → V → LamOp V
 
-  LamOpSig : (V : Set) → StagedSig
-  C (LamOpSig V) = LamOp V
-  R (LamOpSig V) _                = V
-  Z (LamOpSig V) (`app v₁ v₂)     = ⊥
-  Z (LamOpSig V) (`fetch x)       = ⊥
-  Z (LamOpSig V) (`abs x)         = ⊤
-  Z (LamOpSig V) (`letbind x x₁)  = ⊤
-  I (LamOpSig V) _                = V
+  LamOpSig : (V : Set) → Sig
+  S₁ (LamOpSig V) = LamOp V
+  P₁ (LamOpSig V) _                = V
+  S₂ (LamOpSig V) (`app v₁ v₂)     = ⊥
+  S₂ (LamOpSig V) (`fetch x)       = ⊥
+  S₂ (LamOpSig V) (`abs x)         = ⊤
+  S₂ (LamOpSig V) (`letbind x x₁)  = ⊤
+  P₂ (LamOpSig V) _                = V
 
   variable V : Set
 
@@ -63,38 +63,35 @@ module _ where
   data Closure (V : Set) : Set where
     clos : Name → FunLabel → Env V → Closure V
 
-  pget₀ : List A → FunLabel → Maybe A
-  pget₀ [] _ = nothing
-  pget₀ (x ∷ _) 0 = just x
-  pget₀ (_ ∷ xs) (suc n) = pget₀ xs n
+  variable A B : Set
 
-  retrieve = pget₀
+  retrieve : List A → FunLabel → Maybe A
+  retrieve [] _ = nothing
+  retrieve (x ∷ _) 0 = just x
+  retrieve (_ ∷ xs) (suc n) = retrieve xs n
 
-  pget₁ : Env V → Name → Maybe V
-  pget₁ [] _ = nothing
-  pget₁ ((x , v) ∷ nv) y with x ≟ y
+  lookupₐ : Env V → Name → Maybe V
+  lookupₐ [] _ = nothing
+  lookupₐ ((x , v) ∷ nv) y with x ≟ y
   ... | yes _ = just v
-  ... | no  _ = pget₁ nv y
+  ... | no  _ = lookupₐ nv y
 
-  lookupₐ = pget₁
-
-
-  Resumptions : (Set → Set) → StagedSig → Set → Set₁
+  Resumptions : (Set → Set) → Sig → Set → Set₁
   Resumptions L ζ V =
-    List (L ⊤ → Tree L (LamOpSig V ⊞ ζ) (L V))
+    List (L ⊤ → Tree L (LamOpSig V ⊕ ζ) (L V))
 
   try : Maybe A → (A → Tree L ζ (Maybe B)) → Tree L ζ (Maybe B)
   try m f = maybe f (leaf nothing) m
   
   hLam' :  ⦃ Closure V ⊂ V ⦄ → ⦃ RawFunctor L ⦄ →
            Env V → Resumptions L ζ V → ℕ →
-           Tree L (LamOpSig V ⊞ ζ) A →
+           Tree L (LamOpSig V ⊕ ζ) A →
            Tree  (Maybe ∘ (Resumptions L ζ V ×_) ∘ L)
                  ζ (Maybe (Resumptions L ζ V × A))
   hLam' _ _ zero _ = leaf nothing
   hLam' E funs (suc m) (leaf x)  = leaf (just (funs , x))
   hLam' E funs (suc m) (node (inj₁ (`app v₁ v₂)) l _ k) =
-    try (project v₁) λ{ (clos n f E') →
+    try (projectᵛ v₁) λ{ (clos n f E') →
       try (retrieve funs f) (λ r →
         hLam' ((n , v₂) ∷ E') funs m (r l) >>=
           flip try (λ{ (funs' , lv) →
@@ -104,7 +101,7 @@ module _ where
       hLam' E funs m (k (const v <$> l)))
   hLam' E funs (suc m) (node (inj₁ (`abs n)) l st k) =
     hLam'   E (funs ++ [ st tt ]) m
-            (k (const (inject (clos n (length funs) E)) <$> l))
+            (k (const (injectᵛ (clos n (length funs) E)) <$> l))
   hLam' E funs (suc m) (node (inj₁ (`letbind n v)) l st k) =
     hLam' ((n , v) ∷ E) funs m (st tt l) >>=
       flip try λ{ (funs' , lv) → hLam' E funs' m (k lv) }
@@ -118,23 +115,23 @@ module _ where
 
   fetch : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → Tree id ζ V
   fetch ⦃ w ⦄ x = node (inj (`fetch x)) tt
-                       (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
-                       (λ r   → return (subst id (R≡ ⦃ w ⦄) r))
+                       (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
+                       (λ r   → return (subst id (P₁≡ ⦃ w ⦄) r))
 
   abs : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → Tree id ζ V → Tree id ζ V
   abs ⦃ w ⦄ x e = node (inj (`abs x)) tt
-                 (λ z _ → subst (Tree id _) (I≡ ⦃ w ⦄) e)
-                 (λ r → return (subst id (R≡ ⦃ w ⦄) r)) 
+                 (λ z _ → subst (Tree id _) (P₂≡ ⦃ w ⦄) e)
+                 (λ r → return (subst id (P₁≡ ⦃ w ⦄) r)) 
 
   app : ⦃ LamOpSig V ⊏ ζ ⦄ → V → V → Tree id ζ V
   app ⦃ w ⦄ x y = node (inj (`app x y)) tt
-                       (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
-                       (λ r → return (subst id (R≡ ⦃ w ⦄) r))
+                       (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
+                       (λ r → return (subst id (P₁≡ ⦃ w ⦄) r))
 
   letbind : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → V → Tree id ζ V → Tree id ζ V 
   letbind ⦃ w ⦄ x v e = node (inj (`letbind x v)) tt
-                             (λ z _ → subst (Tree id _) (I≡ ⦃ w ⦄) e)
-                             (λ r → return (subst id (R≡ ⦃ w ⦄) r))
+                             (λ z _ → subst (Tree id _) (P₂≡ ⦃ w ⦄) e)
+                             (λ r → return (subst id (P₁≡ ⦃ w ⦄) r))
 
 
   

@@ -34,7 +34,6 @@ open import Scoped.LetBind
 
 -- Section 5.1 (Trees with Staged Effects)
 open import Staged.Denote.Sig
-open import Staged.Denote.StagedSig
 open import Staged.Denote.Tree
 
 -- Section 5.2 (Effect Staging)

@@ -6,10 +6,10 @@ open import Staged.Denote
 
 module _ where
 
-  open StagedSig
+  open Sig
 
-  NoOpSig : StagedSig
-  C NoOpSig = ⊥
-  R NoOpSig ()
-  Z NoOpSig ()
-  I NoOpSig {()}
+  NoOpSig : Sig
+  S₁ NoOpSig = ⊥
+  P₁ NoOpSig ()
+  S₂ NoOpSig ()
+  P₂ NoOpSig {()}

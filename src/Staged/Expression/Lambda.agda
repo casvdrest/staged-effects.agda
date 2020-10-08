@@ -7,18 +7,19 @@ open import Data.Unit
 open import Data.Bool
 open import Data.Product
 
+open import Container
 open import Staged.Denote
 open import Staged.Effects.Lambda
 open import Staged.Value.Core
 
 module _ where
 
-  LamExpr : Sig
-  Sig.S LamExpr = (Name ⊎ Name) ⊎ ⊤ ⊎ Name
-  Sig.P LamExpr (inj₁ (inj₁ x )) = ⊥     -- var x
-  Sig.P LamExpr (inj₁ (inj₂ y )) = ⊤     -- abs x e
-  Sig.P LamExpr (inj₂ (inj₁ tt)) = Bool  -- app e e
-  Sig.P LamExpr (inj₂ (inj₂ y )) = Bool  -- letin x e e
+  LamExpr : Con
+  Con.S LamExpr = (Name ⊎ Name) ⊎ ⊤ ⊎ Name
+  Con.P LamExpr (inj₁ (inj₁ x )) = ⊥     -- var x
+  Con.P LamExpr (inj₁ (inj₂ y )) = ⊤     -- abs x e
+  Con.P LamExpr (inj₂ (inj₁ tt)) = Bool  -- app e e
+  Con.P LamExpr (inj₂ (inj₂ y )) = Bool  -- letin x e e
 
 module _ {V : Set} where 
 
@@ -39,14 +40,14 @@ module _ {V : Set} where
 
 module _ where 
 
-  var' : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ
-  var' x = injectᶜ ((inj₁ (inj₁ x)) , λ())
+  var' : ⦃ LamExpr ≺ C ⦄ → Name → μ C
+  var' x = inject ((inj₁ (inj₁ x)) , λ())
 
-  abs' : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ → μ σ
-  abs' x e = injectᶜ ((inj₁ (inj₂ x)) , λ _ → e)
+  abs' : ⦃ LamExpr ≺ C ⦄ → Name → μ C → μ C
+  abs' x e = inject ((inj₁ (inj₂ x)) , λ _ → e)
 
-  app' : ⦃ LamExpr ⊰ σ ⦄ → μ σ → μ σ → μ σ
-  app' e₁ e₂ = injectᶜ ((inj₂ (inj₁ tt)) , λ { false → e₁ ; true → e₂ })
+  app' : ⦃ LamExpr ≺ C ⦄ → μ C → μ C → μ C
+  app' e₁ e₂ = inject ((inj₂ (inj₁ tt)) , λ { false → e₁ ; true → e₂ })
 
-  let' : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ → μ σ → μ σ
-  let' x e₁ e₂ = injectᶜ ((inj₂ (inj₂ x)) , λ { false → e₁ ; true → e₂  })
+  let' : ⦃ LamExpr ≺ C ⦄ → Name → μ C → μ C → μ C
+  let' x e₁ e₂ = inject ((inj₂ (inj₂ x)) , λ { false → e₁ ; true → e₂  })

@@ -12,8 +12,8 @@ open import Data.Product
 
 open import Relation.Binary.PropositionalEquality
 
-
 -- Step 1: import basic library functionality
+open import Container
 open import Staged.Denote
 
 -- Step 2: import effects
@@ -37,14 +37,14 @@ module _ where
     vclos : Closure Val → Val
 
   instance ℕ⊂Val : ℕ ⊂ Val
-  _⊂_.inject ℕ⊂Val = vnat
-  _⊂_.project ℕ⊂Val (vnat x) = just x
-  _⊂_.project ℕ⊂Val (vclos x) = nothing
+  _⊂_.injectᵛ ℕ⊂Val = vnat
+  _⊂_.projectᵛ ℕ⊂Val (vnat x) = just x
+  _⊂_.projectᵛ ℕ⊂Val (vclos x) = nothing
 
   instance Closure⊂Val : Closure Val ⊂ Val
-  _⊂_.inject Closure⊂Val = vclos
-  _⊂_.project Closure⊂Val (vnat x) = nothing
-  _⊂_.project Closure⊂Val (vclos x) = just x
+  _⊂_.injectᵛ Closure⊂Val = vclos
+  _⊂_.projectᵛ Closure⊂Val (vnat x) = nothing
+  _⊂_.projectᵛ Closure⊂Val (vclos x) = just x
 
 
   -- Compose Expression type
@@ -52,7 +52,7 @@ module _ where
 
 
   -- Compose effect signature
-  LamSig = NatOpSig Val ⊞ StateSig ℕ ⊞ LamOpSig Val ⊞ NoOpSig
+  LamSig = NatOpSig Val ⊕ StateSig ℕ ⊕ LamOpSig Val ⊕ NoOpSig
 
 
   -- Build semantic function

@@ -1,100 +1,63 @@
 module Staged.Denote.Sig where
 
+open import Function using (id ; _∘_)
 open import Data.Sum using (_⊎_ ; inj₁ ; inj₂)
-open import Data.Product using (_×_ ; _,_ ; proj₁ ; proj₂ ; Σ-syntax ; uncurry)
-open import Data.Maybe
 
-open import Function using (id ; const ; _∘_)
-open import Level
+open import Relation.Binary.PropositionalEquality using (_≡_ ; refl ; subst ; trans ; cong ; sym)
 
--- Definition, extension and fixpoint
 module _ where
-
-  variable ℓ : Level
 
   record Sig : Set₁ where
-    constructor _▹_
-    field S : Set
-          P : S → Set
-
-  ⟦_⟧ᶜ : Sig → (Set ℓ → Set ℓ)
-  ⟦ S ▹ P ⟧ᶜ X = Σ[ s ∈ S ] (P s → X)
-
-  data μ {ℓ} (σ : Sig) : Set ℓ where
-    ⟨_⟩ : ⟦ σ ⟧ᶜ (μ {ℓ} σ) → μ σ
-
-
--- Map/Fold
-module _ where
-
-  variable 
-           A B : Set ℓ
-           σ σ₁ σ₂ σ₃ : Sig
-
-  mapᶜ : (f : A → B) → ⟦ σ ⟧ᶜ A → ⟦ σ ⟧ᶜ B 
-  mapᶜ f (s , p) = s , f ∘ p
-
-  infix 5 _⇒_
-  _⇒_ : ∀ {ℓ} → (σ : Sig) → (A : Set ℓ) → Set ℓ
-  σ ⇒ A = ⟦ σ ⟧ᶜ A → A
-  
-  foldᶜ : σ ⇒ A → μ {ℓ} σ → A
-  foldᶜ f ⟨ s , p ⟩ = f (s , foldᶜ f ∘ p)
-
--- Combinators 
-module _ where
+    constructor _▹_∣_▹_  
+    field S₁ : Set
+          P₁ : S₁ → Set
+          S₂ : S₁ → Set
+          P₂ : ∀ {s₁} → S₂ s₁ → Set
 
   open Sig
 
-  infixr 10 _∪_
-  _∪_ : (σ₁ σ₂ : Sig) → Sig
-  S (σ₁ ∪ σ₂) = S σ₁ ⊎ S σ₂
-  P (σ₁ ∪ σ₂) (inj₁ x) = P σ₁ x
-  P (σ₁ ∪ σ₂) (inj₂ y) = P σ₂ y
+  infixr 15 _⊕_
+  _⊕_ : (ζ₁ ζ₂ : Sig) → Sig
+  S₁ (ζ₁ ⊕ ζ₂)             = S₁ ζ₁ ⊎ S₁ ζ₂
+  P₁ (ζ₁ ⊕ ζ₂) (inj₁ x)    = P₁ ζ₁ x
+  P₁ (ζ₁ ⊕ ζ₂) (inj₂ y)    = P₁ ζ₂ y
+  S₂ (ζ₁ ⊕ ζ₂) (inj₁ x)    = S₂ ζ₁ x
+  S₂ (ζ₁ ⊕ ζ₂) (inj₂ y)    = S₂ ζ₂ y
+  P₂ (ζ₁ ⊕ ζ₂) {inj₁ x} r  = P₂ ζ₁ r
+  P₂ (ζ₁ ⊕ ζ₂) {inj₂ y} r  = P₂ ζ₂ r
 
-  infixr 10 _∩_
-  _∩_ : (σ₁ σ₂ : Sig) → Sig
-  S (σ₁ ∩ σ₂) = S σ₁ × S σ₂
-  P (σ₁ ∩ σ₂) = uncurry λ s₁ s₂ → P σ₁ s₁ ⊎ P σ₂ s₂
-
-
--- Algebra composition
 module _ where 
 
-  infixr 10 _⊙_
-  _⊙_ :   (σ₁ ⇒ A)
-        → (σ₂ ⇒ A)
-          -----------
-        → σ₁ ∪ σ₂ ⇒ A
-        
-  (f ⊙ g) (inj₁ x , p) = f (x , p)
-  (f ⊙ g) (inj₂ y , p) = g (y , p)
+  infix 10 _⊏_
+  record _⊏_ (ζ₁ ζ₂ : Sig) : Set₁ where 
+    open Sig
+    field  inj  : S₁ ζ₁ → S₁ ζ₂
+           P₁≡ : ∀ {op} → P₁ ζ₂ (inj op) ≡ P₁ ζ₁ op 
+           S₂≡ : ∀ {op} → S₂ ζ₂ (inj op) ≡ S₂ ζ₁ op
+           P₂≡ : ∀ {op} {s₂ : S₂ ζ₂ (inj op)} → P₂ ζ₁ (subst id S₂≡ s₂) ≡ P₂ ζ₂ s₂
 
-module _ where
+  variable ζ ζ₁ ζ₂ ζ₃ : Sig
+             
+  open _⊏_ ⦃...⦄
 
-  open import Staged.Value.Core
+  instance ⊏-refl : ζ ⊏ ζ
+  _⊏_.inj  ⊏-refl = id
+  _⊏_.P₁≡ ⊏-refl = refl
+  _⊏_.S₂≡ ⊏-refl = refl
+  _⊏_.P₂≡ ⊏-refl = refl
 
-  _⊰_ : (σ₁ σ₂ : Sig) → Set₁
-  σ₁ ⊰ σ₂ = ∀ {A} → ⟦ σ₁ ⟧ᶜ A ⊂ ⟦ σ₂ ⟧ᶜ A
+  instance ⊏-left : ζ₁ ⊏ ζ₁ ⊕ ζ₂
+  _⊏_.inj  ⊏-left = inj₁
+  _⊏_.P₁≡ ⊏-left = refl
+  _⊏_.S₂≡ ⊏-left = refl
+  _⊏_.P₂≡ ⊏-left = refl
 
-  instance ⊰-refl : σ ⊰ σ
-  _⊂_.inject  ⊰-refl = id
-  _⊂_.project ⊰-refl = just
+  
+  eq≡ : ∀ {ℓ} {A : Set ℓ} {x y : A} → (eq₁ : x ≡ y) → (eq₂ : x ≡ y) → eq₁ ≡ eq₂
+  eq≡ refl refl = refl
 
-  instance ⊰-left : σ₁ ⊰ (σ₁ ∪ σ₂)
-  _⊂_.inject ⊰-left (s , p) = inj₁ s , p
-  _⊂_.project ⊰-left (inj₁ x , p) = just (x , p)
-  _⊂_.project ⊰-left (inj₂ y , p) = nothing
-
-  instance ⊰-right : ⦃ σ₁ ⊰ σ₃ ⦄ → σ₁ ⊰ (σ₂ ∪ σ₃)
-  _⊂_.inject (⊰-right ⦃ w ⦄) x with inject ⦃ w ⦄ x
-  ... | s , p =  inj₂ s , p
-  _⊂_.project ⊰-right (inj₁ x , p) = nothing
-  _⊂_.project ⊰-right (inj₂ y , p) = project (y , p)
-
-
-  injectᶜ : ⦃ σ₁ ⊰ σ₂ ⦄ → ⟦ σ₁ ⟧ᶜ (μ σ₂) → μ {zero} σ₂
-  injectᶜ x = ⟨ inject x ⟩
-
-  projectᶜ : ⦃ σ₁ ⊰ σ₂ ⦄ → μ {zero} σ₂ → Maybe (⟦ σ₁ ⟧ᶜ (μ {zero} σ₂))
-  projectᶜ ⟨ x ⟩ = project x
+  instance ⊏-right : ⦃ ζ₁ ⊏ ζ₃ ⦄ → ζ₁ ⊏ ζ₂ ⊕ ζ₃  
+  _⊏_.inj  ⊏-right = inj₂ ∘ inj 
+  _⊏_.P₁≡ (⊏-right ⦃ w ⦄) {op}     rewrite (P₁≡ ⦃ w ⦄ {op}) = refl
+  _⊏_.S₂≡ (⊏-right ⦃ w ⦄) {op}     rewrite (S₂≡ ⦃ w ⦄ {op}) = refl
+  _⊏_.P₂≡ (⊏-right {ζ₁}  ⦃ w ⦄) {op} {z} rewrite (sym (P₂≡ ⦃ w ⦄ {op} {z})) = cong (Sig.P₂ ζ₁) let zeq = (S₂≡ ⦃ w ⦄ {op}) in cong (λ x → subst id x z) (eq≡ _ _)

@@ -4,14 +4,15 @@ open import Data.Nat
 open import Data.Empty
 open import Data.Product
 
+open import Container
 open import Staged.Denote
 open import Staged.Effects.Nat
 
 module _ where
 
-  NatExpr : Sig
-  Sig.S NatExpr   = ℕ
-  Sig.P NatExpr _ = ⊥
+  NatExpr : Con
+  Con.S NatExpr   = ℕ
+  Con.P NatExpr _ = ⊥
 
 module _ {V : Set} where
 
@@ -25,6 +26,6 @@ module _ {V : Set} where
 
 module _ where 
 
-  nat' : ⦃ NatExpr ⊰ σ ⦄ → ℕ → μ σ
-  nat' n = injectᶜ (n , λ())
+  nat' : ⦃ NatExpr ≺ C ⦄ → ℕ → μ C
+  nat' n = inject (n , λ())
 
