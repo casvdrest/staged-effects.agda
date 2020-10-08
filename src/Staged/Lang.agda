@@ -26,6 +26,7 @@ open import Staged.Effects.NoOp
 open import Staged.Expression.Nat
 open import Staged.Expression.State ℕ
 open import Staged.Expression.Lambda
+open import Staged.Expression.Seq
 
 -- Step 4: assemble eDSL
 module _ where
@@ -47,7 +48,7 @@ module _ where
 
 
   -- Compose Expression type
-  Expr   = NatExpr ∪ StateExpr ∪ LamExpr 
+  Expr   = NatExpr ∪ StateExpr ∪ LamExpr ∪ SeqExpr
 
 
   -- Compose effect signature
@@ -56,7 +57,7 @@ module _ where
 
   -- Build semantic function
   ⟦_⟧ : μ Expr → Tree id LamSig Val
-  ⟦_⟧ = ⟪ ⟦nat⟧ `⊙ ⟦state⟧ `⊙ ⟦lambda⟧ ⟫
+  ⟦_⟧ = ⟪ ⟦nat⟧ `⊙ ⟦state⟧ `⊙ ⟦lambda⟧ `⊙ ⟦seq⟧ ⟫
 
   -- Define handler application
   operate : Tree id LamSig Val → ℕ → Maybe Val
@@ -76,31 +77,33 @@ module _ where
   `v = 4
   `w = 5
 
-  example₀ : μ Expr
-  example₀ = let' `x (abs' `y (put' $ nat' 10) ) $
-             let' `z (app' (var' `x) (var' `x))  $
-             let' `u (app' (var' `x) (var' `x))  $ get'
+  -- Example below loops
+  
+  -- example₀ : μ Expr
+  -- example₀ = let' `x (abs' `y (put' $ nat' 10) ) $
+  --            let' `z (app' (var' `x) (var' `x))  $
+  --            let' `u (app' (var' `x) (var' `x))  $ get'
 
 
-  -- ut₀ : operate ⟦ example₀ ⟧ 20 ≡ {!!}
-  -- ut₀ = refl
+  -- -- ut₀ : operate ⟦ example₀ ⟧ 20 ≡ {!!}
+  -- -- ut₀ = refl
 
-  -- example₁ : Expr
-  -- example₁ =
-  --   let' 0 (lam 1 (plus (var 1) (var 1))) $
-  --   call (var 0) (num 4)
+  -- -- example₁ : Expr
+  -- -- example₁ =
+  -- --   let' 0 (lam 1 (plus (var 1) (var 1))) $
+  -- --   call (var 0) (num 4)
 
-  -- ut₁ : operate (denote example₁) ≡ just (numv 8)
-  -- ut₁ = refl
+  -- -- ut₁ : operate (denote example₁) ≡ just (numv 8)
+  -- -- ut₁ = refl
 
-  -- example₂ : Expr
-  -- example₂ =
-  --   let' 0 (lam 1 (update (plus recall (num 1)))) $
-  --   let' 2 (lam 3 (update (plus recall (num 2)))) $
-  --   let' 4 (call (var 0) (num 0)) $
-  --   let' 5 (call (var 2) (num 0)) $
-  --   recall
+  -- -- example₂ : Expr
+  -- -- example₂ =
+  -- --   let' 0 (lam 1 (update (plus recall (num 1)))) $
+  -- --   let' 2 (lam 3 (update (plus recall (num 2)))) $
+  -- --   let' 4 (call (var 0) (num 0)) $
+  -- --   let' 5 (call (var 2) (num 0)) $
+  -- --   recall
 
-  -- ut₂ : operate (denote example₂) ≡ just (numv 3)
-  -- ut₂ = refl
+  -- -- ut₂ : operate (denote example₂) ≡ just (numv 3)
+  -- -- ut₂ = refl
   
