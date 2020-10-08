@@ -96,7 +96,8 @@ module _ where
   hLam' E funs (suc m) (node (inj₁ (`app v₁ v₂)) l _ k) =
     try (project v₁) λ{ (clos n f E') →
       try (retrieve funs f) (λ r →
-        hLam' ((n , v₂) ∷ E') funs m (r l) >>= flip try (λ{ (funs' , lv) →
+        hLam' ((n , v₂) ∷ E') funs m (r l) >>=
+          flip try (λ{ (funs' , lv) →
               hLam' E funs' m (k lv) }))}
   hLam' E funs (suc m) (node (inj₁ (`fetch n)) l _ k) = 
     try (lookupₐ E n) (λ v →
