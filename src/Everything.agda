@@ -1,5 +1,11 @@
 module Everything where
 
+--------------------------------------------------------------------------------
+-- Misc
+
+-- Container definition
+open import Container
+
 
 --------------------------------------------------------------------------------
 -- Section 2 (Compositional Semantics for Languages with
@@ -11,7 +17,12 @@ open import Compositional.Core
 --------------------------------------------------------------------------------
 -- Section 3 (Effects and Handlers)
 
+-- IO Trees
+open import Handlers.IOTree
 
+-- State/Except handlers
+open import Handlers.State
+open import Handlers.Except
 
 
 --------------------------------------------------------------------------------
@@ -30,7 +41,6 @@ open import Scoped.LetBind
 
 --------------------------------------------------------------------------------
 -- Section 5 (Staged Effects and Handlers)
-
 
 -- Section 5.1 (Trees with Staged Effects)
 open import Staged.Denote.Sig
