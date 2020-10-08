@@ -73,8 +73,8 @@ module _ where
   pget₁ : Env V → Name → Maybe V
   pget₁ [] _ = nothing
   pget₁ ((x , v) ∷ nv) y with x ≟ y
-  ... | yes _ = pget₁ nv y
-  ... | no  _ = just v 
+  ... | yes _ = just v
+  ... | no  _ = pget₁ nv y
 
   lookupₐ = pget₁
 
@@ -96,7 +96,7 @@ module _ where
   hLam' E funs (suc m) (node (inj₁ (`app v₁ v₂)) l _ k) =
     try (project v₁) λ{ (clos n f E') →
       try (retrieve funs f) (λ r →
-        hLam' E funs m (r l) >>= flip try (λ{ (funs' , lv) →
+        hLam' ((n , v₂) ∷ E') funs m (r l) >>= flip try (λ{ (funs' , lv) →
               hLam' E funs' m (k lv) }))}
   hLam' E funs (suc m) (node (inj₁ (`fetch n)) l _ k) = 
     try (lookupₐ E n) (λ v →
