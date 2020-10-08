@@ -123,10 +123,19 @@ module _ where
                        (λ r   → return (subst id (R≡ ⦃ w ⦄) r))
 
   abs : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → Tree id ζ V → Tree id ζ V
-  abs {ζ = ζ} ⦃ w ⦄ x e = node (inj (`abs x)) tt
-                 (λ z _ → subst (Tree id ζ) {!z!} e)
-                 {!!}
+  abs ⦃ w ⦄ x e = node (inj (`abs x)) tt
+                 (λ z _ → subst (Tree id _) (I≡ ⦃ w ⦄) e)
+                 (λ r → return (subst id (R≡ ⦃ w ⦄) r)) 
 
-  postulate app : ⦃ LamOpSig V ⊏ ζ ⦄ → V → V → Tree id ζ V
+  app : ⦃ LamOpSig V ⊏ ζ ⦄ → V → V → Tree id ζ V
+  app ⦃ w ⦄ x y = node (inj (`app x y)) tt
+                       (λ z _ → ⊥-elim (subst id (Z≡ ⦃ w ⦄) z))
+                       (λ r → return (subst id (R≡ ⦃ w ⦄) r))
 
-  postulate letbind : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → V → Tree id ζ V → Tree id ζ V 
+  letbind : ⦃ LamOpSig V ⊏ ζ ⦄ → Name → V → Tree id ζ V → Tree id ζ V 
+  letbind ⦃ w ⦄ x v e = node (inj (`letbind x v)) tt
+                             (λ z _ → subst (Tree id _) (I≡ ⦃ w ⦄) e)
+                             (λ r → return (subst id (R≡ ⦃ w ⦄) r))
+
+
+  

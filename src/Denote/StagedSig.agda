@@ -1,9 +1,11 @@
+{-# OPTIONS --type-in-type #-}
+
 module Denote.StagedSig where
 
 open import Function using (id ; _∘_)
 open import Data.Sum using (_⊎_ ; inj₁ ; inj₂)
 
-open import Relation.Binary.PropositionalEquality using (_≡_ ; refl)
+open import Relation.Binary.PropositionalEquality using (_≡_ ; refl ; subst ; trans ; cong ; sym)
 
 module _ where
 
@@ -34,7 +36,7 @@ module _ where
     field  inj  : C ζ₁ → C ζ₂
            R≡ : ∀ {op} → R ζ₂ (inj op) ≡ R ζ₁ op 
            Z≡ : ∀ {op} → Z ζ₂ (inj op) ≡ Z ζ₁ op
-           --I≡ : ∀ {op z} → I ζ₂  ≡ {!!}
+           I≡ : ∀ {op} {z : Z ζ₂ (inj op)} → I ζ₁ (subst id Z≡ z) ≡ I ζ₂ z
 
   variable ζ ζ₁ ζ₂ ζ₃ : StagedSig
 
@@ -44,15 +46,23 @@ module _ where
   _⊏_.inj  ⊏-refl = id
   _⊏_.R≡ ⊏-refl = refl
   _⊏_.Z≡ ⊏-refl = refl
+  _⊏_.I≡ ⊏-refl = refl
 
   instance ⊏-left : ζ₁ ⊏ ζ₁ ⊞ ζ₂
   _⊏_.inj  ⊏-left = inj₁
   _⊏_.R≡ ⊏-left = refl
   _⊏_.Z≡ ⊏-left = refl
+  _⊏_.I≡ ⊏-left = refl
 
-  instance ⊏-right : ⦃ ζ₁ ⊏ ζ₃ ⦄ → ζ₁ ⊏ ζ₂ ⊞ ζ₃  
-  _⊏_.inj  ⊏-right = inj₂ ∘ inj 
-  _⊏_.R≡ (⊏-right ⦃ w ⦄) {op} rewrite (R≡ ⦃ w ⦄ {op}) = refl
-  _⊏_.Z≡ (⊏-right ⦃ w ⦄) {op} rewrite (Z≡ ⦃ w ⦄ {op}) = refl
+  postulate instance ⊏-right : ⦃ ζ₁ ⊏ ζ₃ ⦄ → ζ₁ ⊏ ζ₂ ⊞ ζ₃  
 
-  
+  -- _⊏_.inj  ⊏-right = inj₂ ∘ inj 
+  -- _⊏_.R≡ (⊏-right ⦃ w ⦄) {op}     rewrite (R≡ ⦃ w ⦄ {op}) = refl
+  -- _⊏_.Z≡ (⊏-right ⦃ w ⦄) {op}     rewrite (Z≡ ⦃ w ⦄ {op}) = refl
+  -- _⊏_.I≡ (⊏-right ⦃ w ⦄) {op} {z} with (sym (Z≡ ⦃ w ⦄ {op})) | I≡ ⦃ w ⦄ {op} {z}
+  -- ... | zeq | eq = {!!}
+
+
+
+
+
