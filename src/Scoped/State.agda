@@ -6,28 +6,28 @@ open import Data.Unit
 open import Data.Product
 open import Data.Sum
 
-open import Scoped.Sig
+open import Container
 open import Scoped.Prog
 
 module _ where
 
-  open Sig
+  open Con
   
-  data StateCmd (S : Set) : Set where
-    `get : StateCmd S
-    `put : (s : S) → StateCmd S
+  data StateCmd (H : Set) : Set where
+    `get : StateCmd H
+    `put : (h : H) → StateCmd H
 
-  StateSig : Set → Sig
-  C (StateSig S) = StateCmd S
-  R (StateSig S) `get = S
-  R (StateSig S) (`put s) = ⊤
+  StateSig : Set → Con
+  S (StateSig H) = StateCmd H
+  P (StateSig H) `get = H
+  P (StateSig H) (`put s) = ⊤
 
-  variable S : Set
+  variable H : Set
   
-  hSt' : S → Prog (StateSig S ⊕ σ) γ A → Prog σ γ (A × S)
-  hSt' s  (var x) = var (x , s)
-  hSt' s  (op (inj₁ `get) k) = hSt' s (k s)
-  hSt' _  (op (inj₁ (`put s)) k) = hSt' s (k tt)
-  hSt' s  (op (inj₂ y) k) = op y (hSt' s ∘ k)
-  hSt' s  (scope g sc k) =
-    scope g (hSt' s ∘ sc) (λ{ (x , s) → hSt' s (k x) })
+  hSt' : H → Prog (StateSig H ∪ σ) γ A → Prog σ γ (A × H)
+  hSt' h  (var x) = var (x , h)
+  hSt' h  (op (inj₁ `get) k) = hSt' h (k h)
+  hSt' _  (op (inj₁ (`put h)) k) = hSt' h (k tt)
+  hSt' h  (op (inj₂ y) k) = op y (hSt' h ∘ k)
+  hSt' h  (scope g sc k) =
+    scope g (hSt' h ∘ sc) (λ{ (x , h') → hSt' h' (k x) })

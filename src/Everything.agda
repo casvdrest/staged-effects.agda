@@ -17,9 +17,6 @@ open import Compositional.Core
 --------------------------------------------------------------------------------
 -- Section 4 (Scoped Effects and Handlers)
 
--- Signatures
-open import Scoped.Sig
-
 -- Section 4.1 (Trees with Scoped Effects)
 open import Scoped.Prog
 

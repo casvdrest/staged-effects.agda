@@ -6,27 +6,27 @@ open import Data.Empty
 open import Data.Sum
 open import Data.Maybe using (Maybe ; just ; nothing)
 
-open import Scoped.Sig
+open import Container
 open import Scoped.Prog
 
 module _ where
 
-  open Sig
+  open Con
 
   data Throw (X : Set) : Set where
     `throw : X → Throw X
 
-  ThrowSig : Set → Sig
-  C (ThrowSig X) = Throw X
-  R (ThrowSig X) (`throw x) = ⊥
+  ThrowSig : Set → Con
+  S (ThrowSig X) = Throw X
+  P (ThrowSig X) (`throw x) = ⊥
 
 
   data Catch (X : Set) : Set where
     `catch : Catch X
 
-  CatchScope : Set → Sig
-  C (CatchScope X) = Catch X
-  R (CatchScope X) `catch = Maybe X
+  CatchScope : Set → Con
+  S (CatchScope X) = Catch X
+  P (CatchScope X) `catch = Maybe X
 
 module _ {X : Set} where 
 
@@ -40,7 +40,7 @@ module _ {X : Set} where
             (just x) → h x)
           var
 
-  hEx : Prog (ThrowSig X ⊕ σ) (CatchScope X ⊕ γ) A → Prog σ γ (A ⊎ X)
+  hEx : Prog (ThrowSig X ∪ σ) (CatchScope X ∪ γ) A → Prog σ γ (A ⊎ X)
   hEx (var x) = var (inj₁ x)
   hEx (op (inj₁ (`throw x)) k) = var (inj₂ x)
   hEx (op (inj₂ c) k) = op c (hEx ∘ k)

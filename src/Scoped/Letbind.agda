@@ -10,12 +10,12 @@ open import Data.Unit
 open import Data.Sum
 open import Data.Maybe using (Maybe ; just ; nothing ; maybe)
 
-open import Scoped.Sig
+open import Container
 open import Scoped.Prog
 
 module _ where
 
-  open Sig
+  open Con
 
   Name = ℕ
 
@@ -25,16 +25,16 @@ module _ where
   data FetchOp (V : Set) : Set where
      `fetch : Name → FetchOp V
 
-  FetchSig : Set → Sig
-  C (FetchSig V) = FetchOp V
-  R (FetchSig V) (`fetch x) = V
+  FetchSig : Set → Con
+  S (FetchSig V) = FetchOp V
+  P (FetchSig V) (`fetch x) = V
 
   data LetScope (V : Set) : Set where
      `letbind : Name → V → LetScope V
 
-  LetSig : Set → Sig
-  C (LetSig V) = LetScope V
-  R (LetSig V) (`letbind n v) = ⊤
+  LetSig : Set → Con
+  S (LetSig V) = LetScope V
+  P (LetSig V) (`letbind n v) = ⊤
 
 
 module _ {V : Set} where 
@@ -42,7 +42,7 @@ module _ {V : Set} where
   postulate
     lookupₐ : ∀ {X : Set} → List (Name × X) → Name → Maybe X
 
-  hLet :  Env V → Prog (FetchSig V ⊕ σ) (LetSig V ⊕ γ) A →
+  hLet :  Env V → Prog (FetchSig V ∪ σ) (LetSig V ∪ γ) A →
           Prog σ γ (Maybe A)
   hLet _ (var x) = var (just x)
   hLet E (op (inj₁ (`fetch x)) k) =

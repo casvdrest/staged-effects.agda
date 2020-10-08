@@ -8,12 +8,12 @@ open import Data.Maybe using (Maybe ; just ; nothing ; maybe)
 open import Data.List
 open import Data.Product
 
-open import Scoped.Sig
+open import Container
 open import Scoped.Prog
 
 module _ where
 
-  open Sig
+  open Con
 
   Name = ℕ
 
@@ -23,26 +23,26 @@ module _ where
   data LamScope : Set where
     `lambda : Name → LamScope
 
-  LamSig : Set → Sig
-  C (LamSig V) = LamScope
-  R (LamSig V) (`lambda n) = V
+  LamSig : Set → Con
+  S (LamSig V) = LamScope
+  P (LamSig V) (`lambda n) = V
 
   data FetchOp (V : Set) : Set where
     `fetch : Name → FetchOp V
 
-  FetchSig : Set → Sig
-  C (FetchSig V) = FetchOp V
-  R (FetchSig V) (`fetch x) = V
+  FetchSig : Set → Con
+  S (FetchSig V) = FetchOp V
+  P (FetchSig V) (`fetch x) = V
 
 module _ {V : Set} where
 
   postulate
-    lookupₐ : ∀ {X} → List (Name × X) → Name → Maybe X
+    lookupₐ : {X : Set} → List (Name × X) → Name → Maybe X
 
   postulate CANNOT_BE_DEFINED : ∀ {A : Set} → A
 
   hLam :  Env V →
-          Prog (FetchSig V ⊕ σ) (LamSig V ⊕ γ) A →
+          Prog (FetchSig V ∪ σ) (LamSig V ∪ γ) A →
           Prog σ γ (Maybe A)
   hLam _ (var x) = var (just x)
   hLam E (op (inj₁ (`fetch x)) k) =

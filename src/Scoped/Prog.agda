@@ -1,19 +1,19 @@
 module Scoped.Prog where 
 
-open import Scoped.Sig
+open import Container
 
 open import Function using (const)
 
 module _ where
 
-  open Sig
+  open Con
+
+  variable σ σ₁ σ₂ γ γ₁ γ₂ : Con
   
-  variable A B : Set
-           
-  data Prog (σ γ : Sig) (A : Set) : Set₁ where
+  data Prog (σ γ : Con) (A : Set) : Set₁ where
     var   : A → Prog σ γ A
-    op    : (c : C σ) → (R σ c → Prog σ γ A) → Prog σ γ A
-    scope : (g : C γ) → (R γ g → Prog σ γ B) → (B → Prog σ γ A) → Prog σ γ A
+    op    : (c : S σ) → (P σ c → Prog σ γ A) → Prog σ γ A
+    scope : (g : S γ) → (P γ g → Prog σ γ B) → (B → Prog σ γ A) → Prog σ γ A
 
   return : A → Prog σ γ A
   return = var
