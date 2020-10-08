@@ -76,7 +76,7 @@ module _ where
   ... | yes _ = just v
   ... | no  _ = lookupₐ nv y
 
-  Resumptions : (Set → Set) → Sig → Set → Set₁
+  Resumptions : (Set → Set) → Sig → Set → Set
   Resumptions L ζ V =
     List (L ⊤ → Tree L (LamOpSig V ⊕ ζ) (L V))
 

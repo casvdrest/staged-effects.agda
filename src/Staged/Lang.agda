@@ -1,4 +1,4 @@
-{-# OPTIONS --type-in-type --overlapping-instances #-}
+{-# OPTIONS --overlapping-instances #-}
 
 module Staged.Lang where
 
