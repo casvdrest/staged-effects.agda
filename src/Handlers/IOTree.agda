@@ -16,14 +16,14 @@ module _ where
     end  : A → IO σ A
     cmd  : (c : S σ) → (P σ c → IO σ A) → IO σ A
 
-  return : A → IO K A
+  return : A → IO σ A
   return = end
 
-  _>>=_ : IO K A → (A → IO K B) → IO K B
+  _>>=_ : IO σ A → (A → IO σ B) → IO σ B
   end x    >>= k = k x
   cmd c p  >>= k = cmd c (λ x → p x >>= k)
 
-  _>>_ : IO K A → IO K B → IO K B
+  _>>_ : IO σ A → IO σ B → IO σ B
   f >> g = f >>= const g
 
   fold : (gen : A → B)
