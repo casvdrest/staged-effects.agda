@@ -1,4 +1,4 @@
-module Expression.Lambda where
+module Staged.Expression.Lambda where
 
 open import Data.Sum
 open import Data.Nat
@@ -7,13 +7,9 @@ open import Data.Unit
 open import Data.Bool
 open import Data.Product
 
-open import Denote.Sig
-open import Denote.StagedSig
-open import Denote.Tree
-
-open import Effects.Lambda
-
-open import Value.Core
+open import Staged.Denote
+open import Staged.Effects.Lambda
+open import Staged.Value.Core
 
 module _ where
 
@@ -43,14 +39,14 @@ module _ {V : Set} where
 
 module _ where 
 
-  varᴱ : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ
-  varᴱ x = injectᶜ ((inj₁ (inj₁ x)) , λ())
+  var' : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ
+  var' x = injectᶜ ((inj₁ (inj₁ x)) , λ())
 
-  absᴱ : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ → μ σ
-  absᴱ x e = injectᶜ ((inj₁ (inj₂ x)) , λ _ → e)
+  abs' : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ → μ σ
+  abs' x e = injectᶜ ((inj₁ (inj₂ x)) , λ _ → e)
 
-  appᴱ : ⦃ LamExpr ⊰ σ ⦄ → μ σ → μ σ → μ σ
-  appᴱ e₁ e₂ = injectᶜ ((inj₂ (inj₁ tt)) , λ { false → e₁ ; true → e₂ })
+  app' : ⦃ LamExpr ⊰ σ ⦄ → μ σ → μ σ → μ σ
+  app' e₁ e₂ = injectᶜ ((inj₂ (inj₁ tt)) , λ { false → e₁ ; true → e₂ })
 
-  letbindᴱ : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ → μ σ → μ σ
-  letbindᴱ x e₁ e₂ = injectᶜ ((inj₂ (inj₂ x)) , λ { false → e₁ ; true → e₂  })
+  let' : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ → μ σ → μ σ
+  let' x e₁ e₂ = injectᶜ ((inj₂ (inj₂ x)) , λ { false → e₁ ; true → e₂  })

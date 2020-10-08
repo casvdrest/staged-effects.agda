@@ -1,6 +1,6 @@
 {-# OPTIONS --type-in-type --overlapping-instances #-}
 
-module Lang where
+module Staged.Lang where
 
 open import Function
 
@@ -45,7 +45,7 @@ module _ where
   ⟦_⟧ = ⟪ ⟦nat⟧ `⊙ ⟦state⟧ `⊙ ⟦lambda⟧ ⟫
 
 
--- Examples 
+-- Step 5: profit
 module _ where 
 
   `x `y `z : Name
@@ -53,8 +53,13 @@ module _ where
   `y = 1
   `z = 2
 
-  -- let x = (λ y → put 1337) in 42 
+  -- let x = put 1337 in get  
   prog₀ : μ Expr
-  prog₀ = letbindᴱ `x (absᴱ `y (putᴱ (natᴱ 1337))) (putᴱ (natᴱ 42))
+  prog₀ = letbindᴱ `x (natᴱ 1337) (letbindᴱ `y (putᴱ (natᴱ 10)) {!!})
 
   
+  operate : Tree id (StateSig ℕ ⊕ AbsSig Val ⊕ NoOpSig) Val → Maybe Val
+operate t with runAbs [] [] $ runState 0 t
+... | leaf nothing = nothing
+... | leaf (just (_ , nothing)) = nothing
+... | leaf (just (_ , just (_ , v))) = just v

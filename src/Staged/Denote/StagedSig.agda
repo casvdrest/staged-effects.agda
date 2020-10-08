@@ -1,6 +1,6 @@
 {-# OPTIONS --type-in-type #-}
 
-module Denote.StagedSig where
+module Staged.Denote.StagedSig where
 
 open import Function using (id ; _∘_)
 open import Data.Sum using (_⊎_ ; inj₁ ; inj₂)

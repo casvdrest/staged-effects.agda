@@ -1,6 +1,6 @@
 {-# OPTIONS --type-in-type #-}
 
-module Effects.Lambda where
+module Staged.Effects.Lambda where
 
 open import Function
 open import Level
@@ -14,11 +14,9 @@ open import Data.Unit using (⊤ ; tt)
 open import Data.Product
 open import Data.Sum
 
-open import Denote.Sig
-open import Denote.StagedSig
-open import Denote.Tree
+open import Staged.Denote
 
-open import Value.Core
+open import Staged.Value.Core
 
 open import Relation.Nullary
 open import Relation.Binary.PropositionalEquality hiding ([_])

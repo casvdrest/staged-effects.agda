@@ -1,4 +1,4 @@
-module Denote.Sig where
+module Staged.Denote.Sig where
 
 open import Data.Sum using (_⊎_ ; inj₁ ; inj₂)
 open import Data.Product using (_×_ ; _,_ ; proj₁ ; proj₂ ; Σ-syntax ; uncurry)
@@ -72,7 +72,7 @@ module _ where
 
 module _ where
 
-  open import Value.Core
+  open import Staged.Value.Core
 
   _⊰_ : (σ₁ σ₂ : Sig) → Set₁
   σ₁ ⊰ σ₂ = ∀ {A} → ⟦ σ₁ ⟧ᶜ A ⊂ ⟦ σ₂ ⟧ᶜ A

@@ -1,6 +1,6 @@
 {-# OPTIONS --type-in-type #-}
 
-module Effects.Nat where
+module Staged.Effects.Nat where
 
 open import Function
 
@@ -10,13 +10,10 @@ open import Data.Unit
 open import Data.Sum
 open import Data.Product
 
-open import Denote.Sig
-open import Denote.StagedSig
-open import Denote.Tree
+open import Staged.Denote
+open import Staged.Value.Core
 
 open import Category.Functor
-
-open import Value.Core
 
 open import Relation.Binary.PropositionalEquality
 

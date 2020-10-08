@@ -1,6 +1,6 @@
 {-# OPTIONS --type-in-type #-}
 
-module Effects.State where
+module Staged.Effects.State where
 
 open import Function
 
@@ -10,9 +10,7 @@ open import Data.Product
 open import Data.Sum
 open import Data.List
 
-open import Denote.Sig
-open import Denote.StagedSig
-open import Denote.Tree
+open import Staged.Denote
 
 open import Relation.Binary.PropositionalEquality
 

@@ -1,11 +1,11 @@
-module Denote.Tree where
+module Staged.Denote.Tree where
 
 open import Function using (id ; _∘_ ; const)
 
 open import Data.Unit
 
-open import Denote.Sig
-open import Denote.StagedSig
+open import Staged.Denote.Sig
+open import Staged.Denote.StagedSig
 
 
 module _ where

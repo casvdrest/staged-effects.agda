@@ -1,11 +1,11 @@
-module Expression.Nat where
+module Staged.Expression.Nat where
 
 open import Data.Nat
 open import Data.Empty
 open import Data.Product
 
-open import Denote
-open import Effects.Nat
+open import Staged.Denote
+open import Staged.Effects.Nat
 
 module _ where
 
@@ -25,6 +25,6 @@ module _ {V : Set} where
 
 module _ where 
 
-  natᴱ : ⦃ NatExpr ⊰ σ ⦄ → ℕ → μ σ
-  natᴱ n = injectᶜ (n , λ())
+  nat' : ⦃ NatExpr ⊰ σ ⦄ → ℕ → μ σ
+  nat' n = injectᶜ (n , λ())
 

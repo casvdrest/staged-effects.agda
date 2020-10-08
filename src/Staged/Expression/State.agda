@@ -1,4 +1,4 @@
-module Expression.State (St : Set) where
+module Staged.Expression.State (St : Set) where
 
 open import Data.Bool
 open import Data.Empty
@@ -7,13 +7,9 @@ open import Data.Product
 open import Data.Nat
 open import Data.Maybe hiding (_>>=_)
 
-open import Denote.Sig
-open import Denote.StagedSig
-open import Denote.Tree
-
-open import Effects.State
-
-open import Value.Core
+open import Staged.Denote
+open import Staged.Effects.State
+open import Staged.Value.Core
 
 module _ where 
 
@@ -42,8 +38,8 @@ module _ {V : Set} where
 
 module _ where 
 
-  getᴱ : ⦃ StateExpr ⊰ σ ⦄ → μ σ
-  getᴱ = injectᶜ (false , λ())
+  get' : ⦃ StateExpr ⊰ σ ⦄ → μ σ
+  get' = injectᶜ (false , λ())
 
-  putᴱ : ⦃ StateExpr ⊰ σ ⦄ → μ σ → μ σ
-  putᴱ e = injectᶜ (true , (λ _ → e))
+  put' : ⦃ StateExpr ⊰ σ ⦄ → μ σ → μ σ
+  put' e = injectᶜ (true , (λ _ → e))

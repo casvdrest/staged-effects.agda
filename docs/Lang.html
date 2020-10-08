@@ -46,17 +46,17 @@
   <a id="1000" href="Lang.html#928" class="Function Operator">⟦_⟧</a> <a id="1004" class="Symbol">=</a> <a id="1006" href="Denote.Tree.html#1489" class="Function Operator">⟪</a> <a id="1008" href="Expression.Nat.html#249" class="Function">⟦nat⟧</a> <a id="1014" href="Denote.Tree.html#1590" class="Function Operator">`⊙</a> <a id="1017" href="Expression.State.html#526" class="Function">⟦state⟧</a> <a id="1025" href="Denote.Tree.html#1590" class="Function Operator">`⊙</a> <a id="1028" href="Expression.Lambda.html#612" class="Function">⟦lambda⟧</a> <a id="1037" href="Denote.Tree.html#1489" class="Function Operator">⟫</a>
 
 
-<a id="1041" class="Comment">-- Examples </a>
-<a id="1054" class="Keyword">module</a> <a id="1061" href="Lang.html#1061" class="Module">_</a> <a id="1063" class="Keyword">where</a> 
+<a id="1041" class="Comment">-- Step 5: profit</a>
+<a id="1059" class="Keyword">module</a> <a id="1066" href="Lang.html#1066" class="Module">_</a> <a id="1068" class="Keyword">where</a> 
 
-  <a id="1073" href="Lang.html#1073" class="Function">`x</a> <a id="1076" href="Lang.html#1076" class="Function">`y</a> <a id="1079" href="Lang.html#1079" class="Function">`z</a> <a id="1082" class="Symbol">:</a> <a id="1084" href="Effects.Lambda.html#662" class="Function">Name</a>
-  <a id="1091" href="Lang.html#1073" class="Function">`x</a> <a id="1094" class="Symbol">=</a> <a id="1096" class="Number">0</a>
-  <a id="1100" href="Lang.html#1076" class="Function">`y</a> <a id="1103" class="Symbol">=</a> <a id="1105" class="Number">1</a>
-  <a id="1109" href="Lang.html#1079" class="Function">`z</a> <a id="1112" class="Symbol">=</a> <a id="1114" class="Number">2</a>
+  <a id="1078" href="Lang.html#1078" class="Function">`x</a> <a id="1081" href="Lang.html#1081" class="Function">`y</a> <a id="1084" href="Lang.html#1084" class="Function">`z</a> <a id="1087" class="Symbol">:</a> <a id="1089" href="Effects.Lambda.html#662" class="Function">Name</a>
+  <a id="1096" href="Lang.html#1078" class="Function">`x</a> <a id="1099" class="Symbol">=</a> <a id="1101" class="Number">0</a>
+  <a id="1105" href="Lang.html#1081" class="Function">`y</a> <a id="1108" class="Symbol">=</a> <a id="1110" class="Number">1</a>
+  <a id="1114" href="Lang.html#1084" class="Function">`z</a> <a id="1117" class="Symbol">=</a> <a id="1119" class="Number">2</a>
 
-  <a id="1119" class="Comment">-- let x = (λ y → put 1337) in 42 </a>
-  <a id="1156" href="Lang.html#1156" class="Function">prog₀</a> <a id="1162" class="Symbol">:</a> <a id="1164" href="Denote.Sig.html#482" class="Datatype">μ</a> <a id="1166" href="Lang.html#887" class="Function">Expr</a>
-  <a id="1173" href="Lang.html#1156" class="Function">prog₀</a> <a id="1179" class="Symbol">=</a> <a id="1181" href="Expression.Lambda.html#1338" class="Function">letbindᴱ</a> <a id="1190" href="Lang.html#1073" class="Function">`x</a> <a id="1193" class="Symbol">(</a><a id="1194" href="Expression.Lambda.html#1127" class="Function">absᴱ</a> <a id="1199" href="Lang.html#1076" class="Function">`y</a> <a id="1202" class="Symbol">(</a><a id="1203" href="Expression.State.html#954" class="Function">putᴱ</a> <a id="1208" class="Symbol">(</a><a id="1209" href="Expression.Nat.html#413" class="Function">natᴱ</a> <a id="1214" class="Number">1337</a><a id="1218" class="Symbol">)))</a> <a id="1222" class="Symbol">(</a><a id="1223" href="Expression.State.html#954" class="Function">putᴱ</a> <a id="1228" class="Symbol">(</a><a id="1229" href="Expression.Nat.html#413" class="Function">natᴱ</a> <a id="1234" class="Number">42</a><a id="1236" class="Symbol">))</a>
+  <a id="1124" class="Comment">-- let x = (λ y → put 1337) in 42 </a>
+  <a id="1161" href="Lang.html#1161" class="Function">prog₀</a> <a id="1167" class="Symbol">:</a> <a id="1169" href="Denote.Sig.html#482" class="Datatype">μ</a> <a id="1171" href="Lang.html#887" class="Function">Expr</a>
+  <a id="1178" href="Lang.html#1161" class="Function">prog₀</a> <a id="1184" class="Symbol">=</a> <a id="1186" href="Expression.Lambda.html#1338" class="Function">letbindᴱ</a> <a id="1195" href="Lang.html#1078" class="Function">`x</a> <a id="1198" class="Symbol">(</a><a id="1199" href="Expression.Lambda.html#1127" class="Function">absᴱ</a> <a id="1204" href="Lang.html#1081" class="Function">`y</a> <a id="1207" class="Symbol">(</a><a id="1208" href="Expression.State.html#954" class="Function">putᴱ</a> <a id="1213" class="Symbol">(</a><a id="1214" href="Expression.Nat.html#413" class="Function">natᴱ</a> <a id="1219" class="Number">1337</a><a id="1223" class="Symbol">)))</a> <a id="1227" class="Symbol">(</a><a id="1228" href="Expression.State.html#954" class="Function">putᴱ</a> <a id="1233" class="Symbol">(</a><a id="1234" href="Expression.Nat.html#413" class="Function">natᴱ</a> <a id="1239" class="Number">42</a><a id="1241" class="Symbol">))</a>
 
   
 </pre></body></html>

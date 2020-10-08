@@ -1,4 +1,4 @@
-module Value.Core where
+module Staged.Value.Core where
 
 open import Function
 

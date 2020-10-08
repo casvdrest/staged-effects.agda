@@ -1,16 +1,17 @@
 module Everything where
 
-import Denote.Sig
-import Denote.StagedSig
-import Denote.Tree
+import Staged.Denote.Sig
+import Staged.Denote.StagedSig
+import Staged.Denote.Tree
 
-import Effects.State
-import Effects.Lambda
-import Effects.Nat
+import Staged.Effects.State
+import Staged.Effects.Lambda
+import Staged.Effects.Nat
 
-import Expression.State
-import Expression.Lambda
+import Staged.Expression.State
+import Staged.Expression.Lambda
+import Staged.Expression.Nat
 
-import Value.Core
+import Staged.Value.Core
 
-import Lang
+import Staged.Lang
