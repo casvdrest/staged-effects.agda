@@ -60,4 +60,5 @@ module _ where
   _⊏_.inj  ⊏-right = inj₂ ∘ inj 
   _⊏_.P₁≡ (⊏-right ⦃ w ⦄) {op}     rewrite (P₁≡ ⦃ w ⦄ {op}) = refl
   _⊏_.S₂≡ (⊏-right ⦃ w ⦄) {op}     rewrite (S₂≡ ⦃ w ⦄ {op}) = refl
-  _⊏_.P₂≡ (⊏-right {ζ₁}  ⦃ w ⦄) {op} {z} rewrite (sym (P₂≡ ⦃ w ⦄ {op} {z})) = cong (Sig.P₂ ζ₁) let zeq = (S₂≡ ⦃ w ⦄ {op}) in cong (λ x → subst id x z) (eq≡ _ _)
+  _⊏_.P₂≡ (⊏-right {ζ₁}  ⦃ w ⦄) {op} {z} rewrite (sym (P₂≡ ⦃ w ⦄ {op} {z})) =
+    cong (Sig.P₂ ζ₁) let zeq = (S₂≡ ⦃ w ⦄ {op}) in cong (λ x → subst id x z) (eq≡ _ _)
