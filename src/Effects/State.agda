@@ -1,3 +1,5 @@
+{-# OPTIONS --type-in-type #-}
+
 module Effects.State where
 
 open import Function

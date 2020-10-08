@@ -26,7 +26,7 @@ module _ {V : Set} where
 
 
   ⟦lambda⟧ :   ⦃ LamOpSig V ⊏ ζ ⦄
-             → ⦃ Closure V `⊏ V ⦄
+             → ⦃ Closure V ⊂ V ⦄
                ------------------
              → LamExpr ⟨ ζ ⟩⇒ V
   
@@ -51,4 +51,4 @@ module _ {V : Set} where
   appᴱ e₁ e₂ = injectᶜ ((inj₂ (inj₁ tt)) , λ { false → e₁ ; true → e₂ })
 
   letbindᴱ : ⦃ LamExpr ⊰ σ ⦄ → Name → μ σ → μ σ → μ σ
-  letbindᴱ x e₁ e₂ = injectᶜ ((inj₂ (inj₂ x)) , λ { false → e₁ ; true → e₂ })
+  letbindᴱ x e₁ e₂ = injectᶜ ((inj₂ (inj₂ x)) , λ { false → e₁ ; true → e₂  })

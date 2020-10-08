@@ -88,7 +88,7 @@ module _ where
   try : Maybe A → (A → Tree L ζ (Maybe B)) → Tree L ζ (Maybe B)
   try m f = maybe f (leaf nothing) m
   
-  hLam' :  ⦃ Closure V `⊏ V ⦄ → ⦃ RawFunctor L ⦄ →
+  hLam' :  ⦃ Closure V ⊂ V ⦄ → ⦃ RawFunctor L ⦄ →
            Env V → Resumptions L ζ V → ℕ →
            Tree L (LamOpSig V ⊞ ζ) A →
            Tree  (Maybe ∘ (Resumptions L ζ V ×_) ∘ L)

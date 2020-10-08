@@ -72,7 +72,7 @@ module _ where
   open import Value.Core
 
   _⊰_ : (σ₁ σ₂ : Sig) → Set₁
-  σ₁ ⊰ σ₂ = ∀ {A} → ⟦ σ₁ ⟧ᶜ A `⊏ ⟦ σ₂ ⟧ᶜ A
+  σ₁ ⊰ σ₂ = ∀ {A} → ⟦ σ₁ ⟧ᶜ A ⊂ ⟦ σ₂ ⟧ᶜ A
 
   injectᶜ : ⦃ σ₁ ⊰ σ₂ ⦄ → ⟦ σ₁ ⟧ᶜ (μ σ₂) → μ {zero} σ₂
   injectᶜ x = ⟨ inject x ⟩

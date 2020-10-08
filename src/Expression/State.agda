@@ -22,17 +22,19 @@ module _ {V : Set} where
   Sig.P StateExpr false = ⊥  -- get
   Sig.P StateExpr true  = ⊤  -- put e
 
+  postulate ERROR : ∀ {A : Set ℓ} → A
 
   ⟦state⟧ :   ⦃ StateSig St ⊏ ζ ⦄
-            → ⦃ St `⊏ V ⦄
+            → ⦃ St ⊂ V ⦄
               --------------------
             → StateExpr ⟨ ζ ⟩⇒ V
 
   denote ⟦state⟧ (false , _) = do
     n ← get
     return (inject n)
-  denote ⟦state⟧ (true  , p) = do
-    just n ← mapᵀ project (p tt)
+  denote (⟦state⟧ ⦃ _ ⦄ ⦃ w ⦄) (true  , p) = do
+    just n ← mapᵀ (project ⦃ w ⦄) (p tt)
+      where nothing → ERROR
     put n
     return (inject n)
 
