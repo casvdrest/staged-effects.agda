@@ -13,11 +13,11 @@ module _ where
 
   open Con
 
-  data Throw (X : Set) : Set where
-    `throw : X → Throw X
+  data ThrowOp (X : Set) : Set where
+    `throw : X → ThrowOp X
 
   ThrowSig : Set → Con
-  S (ThrowSig X) = Throw X
+  S (ThrowSig X) = ThrowOp X
   P (ThrowSig X) (`throw x) = ⊥
 
 
