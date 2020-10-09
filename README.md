@@ -2,7 +2,7 @@
 
 This repository contains the supporting artefact for the PEPM '21
 short paper submission titled: *Staged Effects and Handlers for
-Modular Languages with Abstraction*.
+Modular Languages with Abstraction* ([PDF](https://casvdrest.github.io/staged-effects.agda/pepm21.pdf)).
 
 # Clickable HTML
 
