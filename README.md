@@ -11,7 +11,7 @@ Click
 to start exploring the code in Clickable HTML.
 
 Check out
-[Staged.Lang(https://casvdrest.github.io/staged-effects.agda/Staged.Lang.html)
+[Staged.Lang](https://casvdrest.github.io/staged-effects.agda/Staged.Lang.html)
 for a modular implementation of the object language introduced in the paper.
 
 # Running the Code
