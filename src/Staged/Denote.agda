@@ -22,5 +22,3 @@ module _ where
   instance id-functor : RawFunctor {zero} id
   RawFunctor._<$>_ id-functor = id
 
-
-

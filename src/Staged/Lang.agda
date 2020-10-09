@@ -20,6 +20,7 @@ open import Staged.Denote
 open import Staged.Effects.Nat
 open import Staged.Effects.State
 open import Staged.Effects.Lambda
+open import Staged.Effects.Except
 open import Staged.Effects.NoOp
 
 -- Step 3: import object language constructors
@@ -27,6 +28,7 @@ open import Staged.Expression.Nat
 open import Staged.Expression.State ℕ
 open import Staged.Expression.Lambda
 open import Staged.Expression.Seq
+open import Staged.Expression.Except
 
 -- Step 4: assemble eDSL
 module _ where
@@ -48,22 +50,23 @@ module _ where
 
 
   -- Compose Expression type
-  Expr = μ $ SeqExpr ∪ NatExpr ∪ StateExpr ∪ LamExpr
+  Expr = μ $ SeqExpr ∪ ExcExpr ∪ NatExpr ∪ StateExpr ∪ LamExpr
 
 
   -- Compose effect signature
-  LangSig = NatOpSig Val ⊕ StateSig ℕ ⊕ LamSig Val ⊕ NoOpSig
+  LangSig = NatOpSig Val ⊕ StateSig ℕ ⊕ ExcSig Val Val ⊕ LamSig Val ⊕ NoOpSig
 
 
   -- Build semantic function
   ⟦_⟧ : Expr → Tree id LangSig Val
-  ⟦_⟧ = ⟪ ⟦seq⟧ `⊙ ⟦nat⟧ `⊙ ⟦state⟧ `⊙ ⟦lambda⟧ ⟫
+  ⟦_⟧ = ⟪ ⟦seq⟧ `⊙ ⟦except⟧ `⊙ ⟦nat⟧ `⊙ ⟦state⟧ `⊙ ⟦lambda⟧ ⟫
 
   -- Define handler application
-  operate : Tree id LangSig Val → ℕ → Maybe Val
-  operate x n with hLam' [] [] n (hSt'' 0 (hNat' x))
-  ... | leaf nothing              = nothing
-  ... | leaf (just (_ , _ , snd)) = just snd
+  operate : Tree id LangSig Val → ℕ → Maybe (Val ⊎ Val)
+  operate x n with hLam' [] [] n (hEx (hSt'' 0 (hNat' x)))
+  ... | leaf nothing = nothing
+  ... | leaf (just (_ , (inj₁ (_ , v)))) = just (inj₁ v)
+  ... | leaf (just (_ , (inj₂ (_ , v)))) = just (inj₂ v)
 
 
 -- Step 5: profit
@@ -81,34 +84,54 @@ module _ where
   example₀ : Expr
   example₀ = put' (nat' 1) >>' let' `x (put' (nat' 10)) get'
 
+  ut₀ : operate ⟦ example₀ ⟧ 5 ≡ just (inj₁ (vnat 10))
+  ut₀ = refl
+
   -- put 1 >>' let x = λ y → put 10 in get 
   example₁ : Expr
   example₁ = put' (nat' 1) >>' let' `x (abs' `y (put' (nat' 10))) get'
 
+  ut₁ : operate ⟦ example₁ ⟧ 5 ≡ just (inj₁ (vnat 1))
+  ut₁ = refl
+
   example₂ : Expr
   example₂ = app' (abs' `x (var' `x)) (nat' 4)
 
+  ut₂ : operate ⟦ example₂ ⟧ 4 ≡ just (inj₁ (vnat 4))
+  ut₂ = refl
+
   example₃ : Expr
   example₃ = let' `x (abs' `y (var' `y)) (app' (var' `x) (nat' 5))
+  
+  ut₃ : operate ⟦ example₃ ⟧ 6 ≡ just (inj₁ (vnat 5))
+  ut₃ = refl
 
   example₄ : Expr
   example₄ =
     put' (nat' 0) >>'
     let' `x (abs' `y get') (put' (nat' 42) >>' app' (var' `x) (nat' 0))
 
-  ut₀ : operate ⟦ example₀ ⟧ 5 ≡ just (vnat 10)
-  ut₀ = refl
-
-  ut₁ : operate ⟦ example₁ ⟧ 5 ≡ just (vnat 1) 
-  ut₁ = refl
-
-  ut₂ : operate ⟦ example₂ ⟧ 4 ≡ just (vnat 4)
-  ut₂ = refl
-  
-  ut₃ : operate ⟦ example₃ ⟧ 6 ≡ just (vnat 5)
-  ut₃ = refl
-
-  ut₄ : operate ⟦ example₄ ⟧ 5 ≡ just (vnat 42)
+  ut₄ : operate ⟦ example₄ ⟧ 5 ≡ just (inj₁ (vnat 42))
   ut₄ = refl
 
- 
+  example₅ : Expr
+  example₅ =
+    throw' (nat' 12)
+
+  ut₅ : operate ⟦ example₅ ⟧ 2 ≡ just (inj₂ (vnat 12))
+  ut₅ = refl
+
+  example₆ : Expr
+  example₆ =
+    catch' (throw' (nat' 6)) `x (var' `x)
+
+  ut₆ : operate ⟦ example₆ ⟧ 6 ≡ just (inj₁ (vnat 6))
+  ut₆ = refl
+
+  example₇ : Expr
+  example₇ = 
+    put' (nat' 0) >>'
+    catch' (put' (nat' 1) >>' throw' (nat' 2)) `x get'
+
+  ut₇ : operate ⟦ example₇ ⟧ 6 ≡ just (inj₁ (vnat 1))
+  ut₇ = refl

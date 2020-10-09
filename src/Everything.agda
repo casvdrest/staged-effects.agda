@@ -59,6 +59,7 @@ open import Staged.Expression.State
 open import Staged.Expression.Lambda
 open import Staged.Expression.Nat
 open import Staged.Expression.Seq
+open import Staged.Expression.Except -- not covered in the paper
 
 -- Subtyping for value types
 open import Staged.Value.Core

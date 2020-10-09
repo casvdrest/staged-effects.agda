@@ -46,8 +46,9 @@ module _ where
   variable V : Set
 
   instance
-    ProdFunctor : ∀ {ℓ} {a} {X : Set ℓ} → RawFunctor {a} {a ⊔ ℓ} (X ×_)
-    RawFunctor._<$>_ ProdFunctor f (x , a) = x , f a  -- x , f a
+    ProdFunctor : ∀ {ℓ} {a} {F : Set a → Set a} {X : Set ℓ} → ⦃ RawFunctor F ⦄ →
+                  RawFunctor {a} {a ⊔ ℓ} ((X ×_) ∘ F)
+    RawFunctor._<$>_ ProdFunctor f (x , a) = x , (f <$> a)  -- x , f a
 
   instance
     MaybeFunctor : ∀ {a b} {F} → ⦃ RawFunctor F ⦄ → RawFunctor {a} {b} (Maybe {b} ∘ F)
@@ -80,7 +81,7 @@ module _ where
 
   try : Maybe A → (A → Tree L ζ (Maybe B)) → Tree L ζ (Maybe B)
   try m f = maybe f (leaf nothing) m
-  
+
   hLam' :  ⦃ Closure V ⊂ V ⦄ → ⦃ RawFunctor L ⦄ →
            Env V → Resumptions L ζ V → ℕ →
            Tree L (LamSig V ⊕ ζ) A →
