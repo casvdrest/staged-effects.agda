@@ -53,6 +53,8 @@ open import Staged.Effects.State
 open import Staged.Effects.Lambda
 open import Staged.Effects.Nat
 
+-- Extra:
+open import Staged.Effects.Except
 
 -- Modular expression types for the object language introduced in section 2
 open import Staged.Expression.State
