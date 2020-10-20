@@ -6,6 +6,7 @@ open import Data.Unit
 
 open import Container
 open import Staged.Denote.Sig
+open import Category.Monad
 
 module _ where
 
@@ -43,7 +44,7 @@ module _ where
 -- Tree L ζ is a monad
 module _ where 
 
-  mutual 
+  mutual
     _>>=_ : Tree L ζ A → (A → Tree L ζ B) → Tree L ζ B
     leaf x        >>= t = t x
     node c l st k >>= t = node c l st (k >=> t)
@@ -56,6 +57,9 @@ module _ where
 
   return : A → Tree L ζ A
   return = pure
+
+  Tree-RawMonad : ∀ {L ζ} → RawMonad (Tree L ζ)
+  Tree-RawMonad = record { return = return ; _>>=_ = _>>=_ }
 
 
 -- Algebra-encoded semantic functions + composition
