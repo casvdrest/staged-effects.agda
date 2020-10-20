@@ -10,9 +10,7 @@ open import Category.Monad
 
 module _ where
 
-
   variable L : Set → Set
-
 
   data Tree (L : Set → Set) (ζ : Sig) (A : Set) : Set where
 
