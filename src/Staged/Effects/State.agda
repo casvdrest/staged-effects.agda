@@ -1,5 +1,6 @@
 module Staged.Effects.State where
 
+open import Level
 open import Function
 
 open import Data.Unit
@@ -36,7 +37,7 @@ module _ where
            Tree ((H ×_) ∘ L) ζ (H × A)
   hSt'' h (leaf x) = leaf (h , x)
   hSt'' h (node (inj₁ `get) l _ k) = hSt'' h (k (const h <$> l))
-  hSt'' _ (node (inj₁ (`put h)) l _ k) = hSt'' h (k l)
+  hSt'' _ (node (inj₁ (`put h)) l _ k) = hSt'' h (k (lower <$> l))
   hSt'' h (node (inj₂ c) l st k) =
     node  c (h , l)
           (λ{ z (h' , l) → hSt'' h' (st z l) })
@@ -45,11 +46,11 @@ module _ where
   open _⊏_ ⦃...⦄
 
   get : ⦃ StateSig H ⊏ ζ ⦄ → Tree id ζ H
-  get ⦃ w ⦄ = node (inj `get) tt
+  get ⦃ w ⦄ = node (inj `get) (lift tt)
                    (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
                    (λ r   → return (subst id (P₁≡ ⦃ w ⦄) r))
 
   put : ⦃ StateSig H ⊏ ζ ⦄ → H → Tree id ζ H
-  put ⦃ w ⦄ s = node (inj (`put s)) tt
+  put ⦃ w ⦄ s = node (inj (`put s)) (lift tt)
                      (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
                      (const $ return s) 

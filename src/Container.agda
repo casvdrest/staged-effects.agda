@@ -7,10 +7,10 @@ module Container where
 
 module _ where
 
-  record Con : Set₁ where
+  record Con {ℓ} : Set (suc ℓ) where
     constructor _▹_ 
-    field S : Set
-          P : S → Set 
+    field S : Set ℓ
+          P : S → Set ℓ
 
   open Con public
 
@@ -32,7 +32,7 @@ module _ where
   foldᶜ f ⟨ s , p ⟩ = f (s , foldᶜ f ∘ p)
 
   infixr 10 _∪_
-  _∪_ : (C₁ C₂ : Con) → Con
+  _∪_ : {ℓ : Level} (C₁ C₂ : Con {ℓ}) → Con {ℓ}
   S (C₁ ∪ C₂) = S C₁ ⊎ S C₂
   P (C₁ ∪ C₂) (inj₁ x) = P C₁ x
   P (C₁ ∪ C₂) (inj₂ y) = P C₂ y

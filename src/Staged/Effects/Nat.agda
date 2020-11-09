@@ -1,5 +1,6 @@
 module Staged.Effects.Nat where
 
+open import Level
 open import Function
 
 open import Data.Nat
@@ -46,6 +47,6 @@ module _ {V : Set} where
 
   nat : ⦃ NatOpSig V ⊏ ζ ⦄ → ⦃ ℕ ⊂ V ⦄ → ℕ → Tree id ζ V
   nat ⦃ w ⦄ n =
-    node (inj (`nat (injectᵛ n))) tt
+    node (inj (`nat (injectᵛ n))) (lift tt)
          (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
          (λ r → return (subst id (P₁≡ ⦃ w ⦄) r))

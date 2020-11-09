@@ -2,6 +2,7 @@
 
 module Handlers.IOTree where
 
+open import Level
 open import Function
 
 open import Container
@@ -34,7 +35,7 @@ module _ where
     alg c (fold gen alg ∘ p)
 
 
-  record _≪_ (σ₁ σ₂ : Con) : Set₁ where
+  record _≪_ {ℓ} (σ₁ σ₂ : Con {ℓ}) : Set (suc ℓ) where
     field  inj  : S σ₁ → S σ₂
            ret≡ : ∀ {op} → P σ₂ (inj op) ≡ P σ₁ op 
   open _≪_ ⦃...⦄

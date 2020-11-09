@@ -69,3 +69,6 @@ open import Staged.Value.Core
 
 -- Modular implementation of the object langugage
 open import Staged.Lang
+
+-- Extra: relationship between formalisms
+open import Relationships

@@ -1,5 +1,6 @@
 module Staged.Denote.Sig where
 
+open import Level using (Level) renaming (suc to ℓsuc; zero to ℓ0)
 open import Function using (id ; _∘_)
 open import Data.Sum using (_⊎_ ; inj₁ ; inj₂)
 
@@ -7,17 +8,17 @@ open import Relation.Binary.PropositionalEquality using (_≡_ ; refl ; subst ; 
 
 module _ where
 
-  record Sig : Set₁ where
+  record Sig {ℓ} : Set (ℓsuc ℓ) where
     constructor _▹_∣_▹_  
-    field S₁ : Set
-          P₁ : S₁ → Set
-          S₂ : S₁ → Set
-          P₂ : ∀ {s₁} → S₂ s₁ → Set
+    field S₁ : Set ℓ
+          P₁ : S₁ → Set ℓ
+          S₂ : S₁ → Set ℓ
+          P₂ : ∀ {s₁} → S₂ s₁ → Set ℓ
 
   open Sig
 
   infixr 15 _⊕_
-  _⊕_ : (ζ₁ ζ₂ : Sig) → Sig
+  _⊕_ : {ℓ : Level} (ζ₁ ζ₂ : Sig {ℓ}) → Sig {ℓ}
   S₁ (ζ₁ ⊕ ζ₂)             = S₁ ζ₁ ⊎ S₁ ζ₂
   P₁ (ζ₁ ⊕ ζ₂) (inj₁ x)    = P₁ ζ₁ x
   P₁ (ζ₁ ⊕ ζ₂) (inj₂ y)    = P₁ ζ₂ y

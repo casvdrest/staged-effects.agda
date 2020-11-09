@@ -92,14 +92,14 @@ module _ where
   hLam' E funs (suc m) (node (inj₁ (`app v₁ v₂)) l _ k) =
     try (projectᵛ v₁) λ{ (clos n f E') →
       try (retrieve funs f) (λ r →
-        hLam' ((n , v₂) ∷ E') funs m (r l) >>=
+        hLam' ((n , v₂) ∷ E') funs m (r (lower <$> l)) >>=
           flip try (λ{ (funs' , lv) →
               hLam' E funs' m (k lv) }))}
   hLam' E funs (suc m) (node (inj₁ (`fetch n)) l _ k) = 
     try (lookupₐ E n) (λ v →
       hLam' E funs m (k (const v <$> l)))
-  hLam' E funs (suc m) (node (inj₁ (`abs n)) l st k) =
-    hLam'   E (funs ++ [ st tt ]) m
+  hLam' ⦃ _ ⦄ ⦃ RF ⦄ E funs (suc m) (node (inj₁ (`abs n)) l st k) =
+    hLam'   E (funs ++ [ st tt ∘ (lift <$>_) ]) m
             (k (const (injectᵛ (clos n (length funs) E)) <$> l))
   hLam' E funs (suc m) (node (inj₁ (`letbind n v)) l st k) =
     hLam' ((n , v) ∷ E) funs m (st tt l) >>=
@@ -113,22 +113,22 @@ module _ where
   open _⊏_ ⦃...⦄
 
   fetch : ⦃ LamSig V ⊏ ζ ⦄ → Name → Tree id ζ V
-  fetch ⦃ w ⦄ x = node (inj (`fetch x)) tt
+  fetch ⦃ w ⦄ x = node (inj (`fetch x)) (lift tt)
                        (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
                        (λ r   → return (subst id (P₁≡ ⦃ w ⦄) r))
 
   abs : ⦃ LamSig V ⊏ ζ ⦄ → Name → Tree id ζ V → Tree id ζ V
-  abs ⦃ w ⦄ x e = node (inj (`abs x)) tt
+  abs ⦃ w ⦄ x e = node (inj (`abs x)) (lift tt)
                  (λ z _ → subst (Tree id _) (P₂≡ ⦃ w ⦄) e)
                  (λ r → return (subst id (P₁≡ ⦃ w ⦄) r)) 
 
   app : ⦃ LamSig V ⊏ ζ ⦄ → V → V → Tree id ζ V
-  app ⦃ w ⦄ x y = node (inj (`app x y)) tt
+  app ⦃ w ⦄ x y = node (inj (`app x y)) (lift tt)
                        (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
                        (λ r → return (subst id (P₁≡ ⦃ w ⦄) r))
 
   letbind : ⦃ LamSig V ⊏ ζ ⦄ → Name → V → Tree id ζ V → Tree id ζ V 
-  letbind ⦃ w ⦄ x v e = node (inj (`letbind x v)) tt
+  letbind ⦃ w ⦄ x v e = node (inj (`letbind x v)) (lift tt)
                              (λ z _ → subst (Tree id _) (P₂≡ ⦃ w ⦄) e)
                              (λ r → return (subst id (P₁≡ ⦃ w ⦄) r))
 

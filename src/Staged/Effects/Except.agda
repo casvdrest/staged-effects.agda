@@ -1,5 +1,6 @@
 module Staged.Effects.Except where
 
+open import Level
 open import Function
 
 open import Data.Empty
@@ -45,13 +46,13 @@ module _ where
         Tree L (ExcSig X V ⊕ ζ) A →
         Tree ((_⊎ (L ⊤ × X)) ∘ L) ζ (A ⊎ (L ⊤ × X))
   hEx (leaf x) = leaf (inj₁ x)
-  hEx (node (inj₁ (`throw x)) l _ _) = leaf (inj₂ (l , x))
+  hEx (node (inj₁ (`throw x)) l _ _) = leaf (inj₂ ((lower <$> l) , x))
   hEx (node (inj₁ `catch) l st k) = do
    m ← hEx (st nothing l)
    case m of λ where
      (inj₁ lv) → hEx (k lv)
      (inj₂ (l' , x)) → do
-       m ← hEx (st (just x) (const tt <$> l'))
+       m ← hEx (st (just x) (const (lift tt) <$> l'))
        case m of λ where
          (inj₁ lv) → hEx (k lv)
          (inj₂ lx) → leaf (inj₂ lx)
@@ -65,13 +66,13 @@ module _ where
   open _⊏_ ⦃...⦄
 
   throw : ∀ {V} → ⦃ ExcSig X V ⊏ ζ ⦄ → X → Tree id ζ ⊥
-  throw ⦃ w ⦄ x = node (inj (`throw x)) tt
+  throw ⦃ w ⦄ x = node (inj (`throw x)) (lift tt)
                        (λ z _ → ⊥-elim (subst id (S₂≡ ⦃ w ⦄) z))
                        (λ r   → return (subst id (P₁≡ ⦃ w ⦄) r))
 
   catch : ∀ {V} → ⦃ ExcSig X V ⊏ ζ ⦄ →
           Tree id ζ V → (X → Tree id ζ V) → Tree id ζ V
-  catch ⦃ w ⦄ p h = node (inj `catch) tt
+  catch ⦃ w ⦄ p h = node (inj `catch) (lift tt)
                          (λ z l' →
                            case (subst id (S₂≡ ⦃ w ⦄) z) of λ where
                              nothing →

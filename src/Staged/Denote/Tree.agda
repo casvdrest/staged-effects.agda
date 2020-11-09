@@ -2,6 +2,7 @@ module Staged.Denote.Tree where
 
 open import Function using (id ; _∘_ ; const)
 
+open import Level
 open import Data.Unit
 
 open import Container
@@ -12,15 +13,15 @@ module _ where
 
   variable L : Set → Set
 
-  data Tree (L : Set → Set) (ζ : Sig) (A : Set) : Set where
+  data Tree {ℓ} (L : Set ℓ → Set ℓ) (ζ : Sig {ℓ}) (A : Set ℓ) : Set ℓ where
 
     leaf : A → Tree L ζ A
 
     node : let open Sig ζ in 
 
              (c  : S₁)                                
-           → (l  : L ⊤)
-           → (st : (s₂ : S₂ c) → L ⊤ → Tree L ζ (L (P₂ s₂)))
+           → (l  : L (Lift _ ⊤))
+           → (st : (s₂ : S₂ c) → L (Lift _ ⊤) → Tree L ζ (L (P₂ s₂)))
            → (k  : L (P₁ c) → Tree L ζ A) 
            → Tree L ζ A
 
