@@ -6,7 +6,7 @@ open import Level
 open import Data.Maybe using (Maybe ; just ; nothing ; maybe)
 open import Data.Nat hiding (_⊔_)
 open import Data.List
-open import Data.Bool using (Bool ; true ; false)
+open import Data.Bool using (Bool ; true ; false ; if_then_else_ ; _∧_)
 open import Data.Empty
 open import Data.Unit using (⊤ ; tt)
 open import Data.Product
@@ -81,6 +81,34 @@ module _ where
 
   try : Maybe A → (A → Tree L ζ (Maybe B)) → Tree L ζ (Maybe B)
   try m f = maybe f (leaf nothing) m
+
+  data FunType (T : Set) : Set where
+    fun : (s t : T) → FunType T 
+
+  variable T : Set
+
+  
+
+  record Eq (A : Set) : Set where
+    field _=?_ : (x y : A) → Bool  
+
+  open Eq ⦃...⦄
+
+  postulate trust-me : ∀ {A : Set} → A
+
+  data TCMode : Set where
+    inference checking : TCMode
+
+  hLamCheck : ⦃ FunType T ⊂ T ⦄ → ⦃ RawFunctor L ⦄ → ⦃ Eq T ⦄ → Env T → T → Tree L (LamSig T ⊕ ζ) A → Tree (Maybe ∘ L) ζ (Maybe A)
+  hLamCheck Γ t (leaf x) = leaf (just x)
+  hLamCheck Γ t (node (inj₁ (`app t₁ t₂)) l st k) = try (projectᵛ t₁) λ where (fun s t′) → if (t =? t′) ∧ (s =? t₂) then hLamCheck Γ t (k (const t <$> l)) else leaf nothing
+  hLamCheck Γ t (node (inj₁ (`fetch x)) l st k) = try (lookupₐ Γ x) λ t′ → if t =? t′ then hLamCheck Γ t (k (const t <$> l)) else leaf nothing
+  hLamCheck Γ t (node (inj₁ (`abs x)) l st k) = try (projectᵛ t) λ where (fun s t) → hLamCheck ((x , s) ∷ Γ) t (k (const t <$> l))
+  hLamCheck Γ t (node (inj₁ (`letbind x e)) l st k) = trust-me
+  hLamCheck Γ t (node (inj₂ c) l st k) = node c (just <$> l) (λ r → flip try λ l → hLamCheck Γ t (st r l)) (flip try λ l → hLamCheck Γ t (k l))
+
+  hLamTC : ⦃ FunType T ⊂ T ⦄ → ⦃ RawFunctor L ⦄ → ⦃ Eq T ⦄ → Env T → T → Tree L (LamSig T ⊕ ζ) A → Tree (Maybe ∘ L) ζ (Maybe A)
+  hLamTC = {!!}
 
   hLam' :  ⦃ Closure V ⊂ V ⦄ → ⦃ RawFunctor L ⦄ →
            Env V → Resumptions L ζ V → ℕ →

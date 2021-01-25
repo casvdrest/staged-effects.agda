@@ -48,7 +48,6 @@ module _ where
   _⊂_.projectᵛ Closure⊂Val (vnat x) = nothing
   _⊂_.projectᵛ Closure⊂Val (vclos x) = just x
 
-
   -- Compose Expression type
   Expr = μ $ SeqExpr ∪ ExcExpr ∪ NatExpr ∪ StateExpr ∪ LamExpr
 

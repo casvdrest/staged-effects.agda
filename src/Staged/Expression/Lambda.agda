@@ -24,7 +24,6 @@ module _ where
 module _ {V : Set} where 
 
   ⟦lambda⟧ :   ⦃ LamSig V ⊏ ζ ⦄
-             → ⦃ Closure V ⊂ V ⦄
                ------------------
              → LamExpr ⟨ ζ ⟩⇒ V
   
