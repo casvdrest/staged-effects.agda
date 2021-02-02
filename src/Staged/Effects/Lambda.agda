@@ -21,6 +21,8 @@ open import Relation.Binary.PropositionalEquality hiding ([_])
 
 open import Category.Functor
 
+open import Debug.Trace
+
 module _ where 
 
   open Sig
@@ -95,7 +97,9 @@ module _ where
   open Eq ⦃...⦄
 
   postulate trust-me : ∀ {A : Set} → A
+  postulate wollah : ∀ {A : Set} → A 
 
+{-
   hLamCheck : ⦃ FunType T ⊂ T ⦄ → ⦃ RawFunctor L ⦄ → ⦃ Eq T ⦄ → Env T → T → Tree L (LamSig T ⊕ ζ) A → Tree (Maybe ∘ L) ζ (Maybe A)
   hLamCheck Γ t (leaf x) = leaf (just x)
   hLamCheck Γ t (node (inj₁ (`app t₁ t₂)) l st k) = try (projectᵛ t₁) λ where (fun s t′) → if (t =? t′) ∧ (s =? t₂) then hLamCheck Γ t (k (const t <$> l)) else leaf nothing
@@ -120,6 +124,21 @@ module _ where
   hLamTC Γ (leaf x₁) (just x) = {!!}
   hLamTC Γ (node (inj₁ x₁) l st k) (just x) = {!!}
   hLamTC Γ (node (inj₂ c) l st k) ty = node c l (λ r → {!!}) {!!}
+-}
+
+  hLamCheck : ⦃ FunType T ⊂ T ⦄ → ⦃ RawFunctor L ⦄ → ⦃ Eq T ⦄ → Env T → T → Tree L (LamSig T ⊕ ζ) A → Tree (Maybe ∘ L) ζ (Maybe A)
+  hLamCheck Γ t (leaf x) = leaf (just x)
+  hLamCheck Γ t (node (inj₁ (`app t₁ t₂)) l st k) with projectᵛ t₁
+  ... | nothing = leaf nothing
+  ... | just (fun s t′) = if (t =? t′) ∧ (s =? t₂) then hLamCheck Γ t (k (const t <$> l)) else leaf nothing
+  hLamCheck Γ t (node (inj₁ (`fetch x)) l st k) with lookupₐ Γ x
+  ... | nothing = leaf nothing
+  ... | just t′ = if t′ =? t then hLamCheck Γ t (k (const t <$> l)) else leaf nothing
+  hLamCheck Γ t (node (inj₁ (`abs x)) l st k) with projectᵛ t
+  ... | nothing         = leaf nothing
+  ... | just (fun s t′) = hLamCheck ((x , s) ∷ Γ) t′ (k (const t <$> l))
+  hLamCheck Γ t (node (inj₁ (`letbind x x₁)) l st k) = trust-me
+  hLamCheck Γ t (node (inj₂ c) l st k) = node c (just <$> l) (λ r → flip try λ l → hLamCheck Γ t (st r l)) (flip try λ l → hLamCheck Γ t (k l))
 
   hLam' :  ⦃ Closure V ⊂ V ⦄ → ⦃ RawFunctor L ⦄ →
            Env V → Resumptions L ζ V → ℕ →

@@ -54,14 +54,27 @@ module _ where
   (ty-eq Eq.=? tnat) (tfun y y₁) = false
   (ty-eq Eq.=? tnat) tnat = true
 
-  operate : Tree id LangSig Ty → Ty → Maybe Ty
-  operate x t with hLamCheck [] t (hNatCheck t x)
+  operate : Env Ty → Tree id LangSig Ty → Ty → Maybe Ty
+  operate Γ x t with hLamCheck Γ t (hNatCheck t x)
   ... | leaf nothing = nothing
   ... | leaf (just nothing) = nothing
   ... | leaf (just (just x₁)) = just x₁
 
-  example : Expr
-  example = abs' 0 (nat' 10) 
+  example₀ : Expr
+  example₀ = abs' 0 (nat' 10)
 
-  ut : operate ⟦ example ⟧ (tfun tnat tnat) ≡ just tnat
-  ut = refl
+  tc : Expr → Env Ty → Ty → Set
+  tc tm Γ t = operate Γ ⟦ tm ⟧ t ≡ just t 
+
+  ut₀ : tc example₀ [] (tfun tnat tnat) 
+  ut₀ = refl
+
+  example₁ : Expr
+  example₁ = app' (var' 0) (var' 1)
+
+  -- Won't typecheck, one of the vars fails bc the input type is not equal to the type of the var
+  -- Q: why does this happen? Where does the input type come from in the subexpressions of 'app'?
+  --    Do they have to be equal?
+  --    Can we specify them in the 'app' branch of hLamCheck? 
+  ut₁ : tc example₁ ((0 , tfun tnat tnat) ∷ (1 , tnat) ∷ []) tnat
+  ut₁ = {!refl!}
