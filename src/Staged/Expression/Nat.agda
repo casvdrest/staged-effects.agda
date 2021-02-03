@@ -17,7 +17,6 @@ module _ where
 module _ {V : Set} where
 
   ⟦nat⟧ :   ⦃ NatOpSig V ⊏ ζ ⦄
-          → ⦃ ℕ ⊂ V ⦄
             ------------------
           → NatExpr ⟨ ζ ⟩⇒ V
 
